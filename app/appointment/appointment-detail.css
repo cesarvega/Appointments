@@ -1,13 +1,13 @@
 
 .cardStyle {
     background-color: #3489db;
-    color: #fff;
+    color: #ffffff;
 }
 
 
 .date {    
     font-size: 65;
-    color: white;   
+    color: #ffffff;   
     text-align: center;
 
 }
@@ -37,10 +37,6 @@
     padding-bottom: 5;
 }
 
-.mdi {
-    font-family: "Material Icons", "MaterialIcons-Regular", "FontAwesome", "fontawesome-webfont";
-  }
-
   .icon {
     font-family: 'icomoon';
     font-size: 58;
@@ -68,14 +64,13 @@
     width: 30;
     text-align: center;
     padding-top: 20%;
-    color: #FFF;    
+    color: #ffffff;    
   }
 
   .clock {
     font-size: 4em;
   }
 
-  .checkin{
+  .checkin {
     background-color: #FCD837;
-    color:white";
   }

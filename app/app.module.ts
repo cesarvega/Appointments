@@ -13,6 +13,13 @@ import { AppointmentComponent } from "./appointment/appointment.component";
 // Uncomment and add to NgModule imports  if you need to use the HTTP wrapper
 import { NativeScriptHttpModule } from "nativescript-angular/http";
 
+import * as platform from "platform";
+declare var GMSServices: any;
+
+if(platform.isIOS) {
+    GMSServices.provideAPIKey("AIzaSyAtRVvG3Be3xXiZFR7xp-K-9hy4nZ4hMFs");
+}
+
 @NgModule({
     bootstrap: [
         AppComponent
@@ -25,7 +32,7 @@ import { NativeScriptHttpModule } from "nativescript-angular/http";
     declarations: [
         AppComponent,
         AppointmentComponent,
-        AppointmentDetailComponent
+        AppointmentDetailComponent,
     ],
     providers: [
         AppointmentService
