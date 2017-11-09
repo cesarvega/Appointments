@@ -37,40 +37,48 @@
                 (markerBeginDragging)="onMarkerEvent($event)" (markerEndDragging)="onMarkerEvent($event)" (markerDrag)="onMarkerEvent($event)"
                 (markerInfoWindowTapped)="onMarkerEvent($event)" (coordinateTapped)="onCoordinateTapped($event)" (cameraChanged)="onCameraChanged($event)"></MapView>>
         </GridLayout>
+        
+        <GridLayout columns="*" rows="*">
+            <FlexboxLayout flexGrow="1" flexDirection="column" class="address-info">
+                <button class="expense" [text]="'+ Add Expense'"></button>
+            </FlexboxLayout>
+        </GridLayout>
 
-        <CardView class="cardStyle" margin="10" elevation="20" radius="1" backgroundColor="red">
+        <Label horizontalAlignment="center" textWrap="true" [text]="'EXPENSES'" class="lab-name"></Label>
+
+        <CardView class="cardStyle" margin="10" elevation="20" radius="1" backgroundColor="#F9A11F">
             <GridLayout rows="10,30,30,250, auto, auto,10" columns="10,40, *, 30,10">
-                <Image src="http://www.dccomics.com/sites/default/files/GalleryComics_1920x1080_20160427_BM_Cv51_56f33d0526d1a5.59154201.jpg"
-                    stretch="aspectFit" verticalAlignment="stretch" col="1" row="1" rowSpan="2"></Image>
+                <Image src="https://www.crunch.co.uk/wp-content/uploads/Receipt_scan.jpg" stretch="aspectFit" verticalAlignment="stretch"
+                    col="1" row="1" rowSpan="2"></Image>
                 <Label class=" text-left" horizontalAlignment="left" [text]="'item.CreatedBy'" row="1" col="2" textWrap="true"></Label>
                 <Label class=" text-left" horizontalAlignment="left" [text]="'item.UpdatedDate'" row="2" col="2"></Label>
-                <Image [src]="'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5eYuq8jpTeSZHAwn-BnBBGw-lfdZqxNQ9nEnT3eZtqtyyaFnpXw'"
-                    stretch="aspectFit" colSpan="3" col="1" row="3"></Image>
+                <Image [src]="'https://media-cdn.tripadvisor.com/media/photo-s/07/20/3b/52/this-is-my-proof-of-receipt.jpg'" stretch="aspectFit"
+                    colSpan="3" col="1" row="3"></Image>
                 <Label horizontalAlignment="left" [text]="'item.Title'" colSpan="3" row="4" textWrap="true" col="1"></Label>
                 <Label horizontalAlignment="left" [text]="'item.Summary'" textWrap="true" col="1" row="5" colSpan="3"></Label>
                 <button [text]="'ADD Expense +'"></button>
             </GridLayout>
         </CardView>
-        <CardView class="cardStyle" margin="10" elevation="20" radius="1" backgroundColor="red">
+        <CardView class="cardStyle" margin="10" elevation="20" radius="1" backgroundColor="#F9A11F">
             <GridLayout rows="10,30,30,250, auto, auto,10" columns="10,40, *, 30,10">
                 <Image src="http://www.dccomics.com/sites/default/files/GalleryComics_1920x1080_20160427_BM_Cv51_56f33d0526d1a5.59154201.jpg"
                     stretch="aspectFit" verticalAlignment="stretch" col="1" row="1" rowSpan="2"></Image>
                 <Label class=" text-left" horizontalAlignment="left" [text]="'item.CreatedBy'" row="1" col="2" textWrap="true"></Label>
                 <Label class=" text-left" horizontalAlignment="left" [text]="'item.UpdatedDate'" row="2" col="2"></Label>
-                <Image [src]="'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5eYuq8jpTeSZHAwn-BnBBGw-lfdZqxNQ9nEnT3eZtqtyyaFnpXw'"
-                    stretch="aspectFit" colSpan="3" col="1" row="3"></Image>
+                <Image [src]="'http://www.bookkeeping-essentials.com/images/do-you-need-receipts-for-expenses-under-100-21855225.jpg'" stretch="aspectFit"
+                    colSpan="3" col="1" row="3"></Image>
                 <Label horizontalAlignment="left" [text]="'item.Title'" colSpan="3" row="4" textWrap="true" col="1"></Label>
                 <Label horizontalAlignment="left" [text]="'item.Summary'" textWrap="true" col="1" row="5" colSpan="3"></Label>
                 <button [text]="'ADD Expense +'"></button>
             </GridLayout>
         </CardView>
-        <CardView class="cardStyle" margin="10" elevation="20" radius="1" backgroundColor="red">
+        <CardView class="cardStyle" margin="10" elevation="20" radius="1" backgroundColor="#F9A11F">
             <GridLayout rows="10,30,30,250, auto, auto,10" columns="10,40, *, 30,10">
                 <Image src="http://www.dccomics.com/sites/default/files/GalleryComics_1920x1080_20160427_BM_Cv51_56f33d0526d1a5.59154201.jpg"
                     stretch="aspectFit" verticalAlignment="stretch" col="1" row="1" rowSpan="2"></Image>
                 <Label class=" text-left" horizontalAlignment="left" [text]="'item.CreatedBy'" row="1" col="2" textWrap="true"></Label>
                 <Label class=" text-left" horizontalAlignment="left" [text]="'item.UpdatedDate'" row="2" col="2"></Label>
-                <Image [src]="'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5eYuq8jpTeSZHAwn-BnBBGw-lfdZqxNQ9nEnT3eZtqtyyaFnpXw'"
+                <Image [src]="'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFQ5BRehNaneAcF-DSouZQEfCJ65_XpoovKUgCmKYlNNCyWIp1QA'"
                     stretch="aspectFit" colSpan="3" col="1" row="3"></Image>
                 <Label horizontalAlignment="left" [text]="'item.Title'" colSpan="3" row="4" textWrap="true" col="1"></Label>
                 <Label horizontalAlignment="left" [text]="'item.Summary'" textWrap="true" col="1" row="5" colSpan="3"></Label>
