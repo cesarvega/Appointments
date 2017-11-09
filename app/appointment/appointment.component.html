@@ -1,0 +1,23 @@
+<ActionBar title="BI Appointments" class="action-bar" color="white" backgroundColor="#F9A11F">
+    </ActionBar>
+    <StackLayout backgroundColor="#F9A11F">
+        <ListView class="list-group" [items]="appointments  | async"  >
+            <ng-template let-appointment="item" >
+                <StackLayout (onTap)="onNavigationItemTap(appointment)" >
+                    <GridLayout columns="80,*,auto" rows="*, *, *"  class="info"  >
+                        <FlexboxLayout flexDirection="column" row="0" col="0">
+                            <Label class="date-month" [text]="appointment.AppDate.split(',')[1]"></Label>
+                            <Label class="date" [text]="appointment.AppDate.split(',')[0]"></Label>
+                        </FlexboxLayout>
+                        <FlexboxLayout flexGrow="1" flexDirection="column" row="0" col="1" class="lab-info">
+                                <Label horizontalAlignment="left" [text]="appointment.cliCompany" class="lab-name"></Label>
+                                <Label horizontalAlignment="left" [text]="appointment.cliContact" class="lab-sub-name"></Label>                        
+                        </FlexboxLayout>
+                        <FlexboxLayout flexDirection="column" row="0" col="3" class="">
+                            <Label class="fa" text="&#xf05a;" ></Label>                         
+                        </FlexboxLayout>
+                    </GridLayout>
+                </StackLayout>
+            </ng-template>
+        </ListView>
+    </StackLayout>

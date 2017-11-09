@@ -1,0 +1,47 @@
+<ActionBar title="Appointment Details" class="action-bar" color="white" backgroundColor="#F9A11F">
+</ActionBar>
+
+<ScrollView class="page">
+    <StackLayout>
+        <GridLayout columns="auto,*" rows="*, *" class="info">
+            <FlexboxLayout flexDirection="column" row="0" col="0">
+                <Label class="date" [text]="appointment.AppDate.split(',')[0]"></Label>
+                <Label class="date-month" [text]="appointment.AppDate.split(',')[1]"></Label>
+            </FlexboxLayout>
+            <FlexboxLayout flexGrow="1" flexDirection="column" row="0" col="1" class="lab-info">
+                <Label horizontalAlignment="center" textWrap="true" [text]="appointment.cliCompany" class="lab-name"></Label>
+                <Label horizontalAlignment="center" [text]="appointment.cliContact" class="lab-sub-name"></Label>
+                <Label horizontalAlignment="center" [text]="appointment.cliPhone" class="lab-sub-name"></Label>
+            </FlexboxLayout>
+        </GridLayout>
+        <GridLayout columns="*" rows="*">
+            <FlexboxLayout flexGrow="1" flexDirection="column" row="0" col="1" class="address-info">
+                <Label horizontalAlignment="center" textWrap="true" text="Appointment Address" class="lab-name"></Label>
+                <Label textWrap="true" [text]="appointment.cliAddress1"></Label>
+                <Label *ngIf="appointment.cliAddress2!==''" [text]="appointment.cliAddress2"></Label>
+                <Label [text]="appointment.cliState"></Label>
+                <Label [text]="appointment.cliCity"></Label>
+                <Label [text]="appointment.cliZip"></Label>
+                <Label [text]="appointment.cliCountry"></Label>
+            </FlexboxLayout>
+        </GridLayout>
+        <GridLayout columns="*" rows="*">
+            <FlexboxLayout flexGrow="1" flexDirection="column" class="address-info">
+                    <button class="checkin" [text]="'Check in'"></button>              
+            </FlexboxLayout>
+        </GridLayout>
+        <CardView class="cardStyle" margin="10" elevation="20" radius="1" backgroundColor="red">
+            <GridLayout rows="10,30,30,250, auto, auto,10" columns="10,40, *, 30,10">
+                <Image src="http://www.dccomics.com/sites/default/files/GalleryComics_1920x1080_20160427_BM_Cv51_56f33d0526d1a5.59154201.jpg"
+                    stretch="aspectFit" verticalAlignment="stretch" col="1" row="1" rowSpan="2"></Image>
+                <Label class=" text-left" horizontalAlignment="left" [text]="'item.CreatedBy'" row="1" col="2" textWrap="true"></Label>
+                <Label class=" text-left" horizontalAlignment="left" [text]="'item.UpdatedDate'" row="2" col="2"></Label>
+                <Image [src]="'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5eYuq8jpTeSZHAwn-BnBBGw-lfdZqxNQ9nEnT3eZtqtyyaFnpXw'"
+                    stretch="aspectFit" colSpan="3" col="1" row="3"></Image>
+                <Label horizontalAlignment="left" [text]="'item.Title'" colSpan="3" row="4" textWrap="true" col="1"></Label>
+                <Label horizontalAlignment="left" [text]="'item.Summary'" textWrap="true" col="1" row="5" colSpan="3"></Label>
+                <button [text]="'ADD Expense +'"></button>
+            </GridLayout>
+        </CardView>
+    </StackLayout>
+</ScrollView>

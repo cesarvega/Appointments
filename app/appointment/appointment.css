@@ -1,0 +1,62 @@
+
+
+.date{    
+    font-size: 35;
+    color: white;   
+    text-align: center;
+}
+
+.date-month{
+    font-size: 13;
+    color: #FCD837;
+    text-align: center;
+    padding-top: 5;
+
+}
+
+.lab-name{
+    padding-left: 10;   
+    /* padding-top: 15;    */
+    font-size: 20;
+    font-weight: 600;
+    color: black;
+}
+
+.lab-sub-name{
+    padding-left: 10;
+    font-size: 15;
+    font-weight: 400;
+    color: rgb(75, 75, 75);
+}
+
+.mdi {
+    font-family: "Material Icons", "MaterialIcons-Regular", "FontAwesome", "fontawesome-webfont";
+    /* font-size: 25;
+    width: 30;
+    text-align: center;
+    padding-top: 20%; */
+  }
+
+  .icon {
+    font-family: 'icomoon';
+    font-size: 48;
+ }
+
+.info{
+      background-color: #F27C21;
+  }
+
+.lab-info{
+    background-color: #FCD837;
+    padding-top: 10;
+
+}
+
+.fa {
+    font-family: 'FontAwesome', 'fontawesome-webfont';
+    font-size: 25;
+    width: 30;
+    text-align: center;
+    padding-top: 20%;
+    color: #FFF;    
+  }

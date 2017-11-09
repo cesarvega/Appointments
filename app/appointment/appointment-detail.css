@@ -1,0 +1,81 @@
+
+.cardStyle {
+    background-color: #3489db;
+    color: #fff;
+}
+
+
+.date {    
+    font-size: 65;
+    color: white;   
+    text-align: center;
+
+}
+
+.date-month {
+    font-size: 20;
+    color: #FCD837;
+    text-align: center;
+
+}
+
+.lab-name {
+    padding-left: 15;   
+    font-size: 20;
+    font-weight: 600;
+    color: black;
+    text-align: center;
+    padding-bottom: 8;
+}
+
+.lab-sub-name {
+    padding-left: 10;
+    font-size: 15;
+    font-weight: 400;
+    color: rgb(75, 75, 75);
+    text-align: center;
+    padding-bottom: 5;
+}
+
+.mdi {
+    font-family: "Material Icons", "MaterialIcons-Regular", "FontAwesome", "fontawesome-webfont";
+  }
+
+  .icon {
+    font-family: 'icomoon';
+    font-size: 58;
+ }
+
+.info{
+      background-color: #F27C21;
+  }
+
+.lab-info{
+    background-color: #FCD837;
+    padding-top: 10;
+}
+
+.address-info{
+    background-color: #F9A11F;
+    padding: 10;
+    text-align: center;
+     font-size: 18;
+    font-weight: 600;
+}
+.fa {
+    font-family: 'FontAwesome', 'fontawesome-webfont';
+    font-size: 25;
+    width: 30;
+    text-align: center;
+    padding-top: 20%;
+    color: #FFF;    
+  }
+
+  .clock {
+    font-size: 4em;
+  }
+
+  .checkin{
+    background-color: #FCD837;
+    color:white";
+  }
