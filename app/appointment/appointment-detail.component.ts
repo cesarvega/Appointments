@@ -46,9 +46,8 @@ export class AppointmentDetailComponent implements OnInit {
  
 
     checkinLocation() {
-        this.CurrentLocation =  this.getlocation();
-        console.log(this.CurrentLocation);
-        
+        this.CurrentLocation =  this.getlocation();        
+      
     }
 
     //Map events
@@ -89,7 +88,8 @@ export class AppointmentDetailComponent implements OnInit {
             if (loc) {
                 console.log("Current location is: ");
                 console.dir(loc);
-              return loc;
+                this.appointmentService.setGeoLocation(loc);
+            //   return loc;
             }
         }, (e) => {
             console.log("Error: " + e.message);            
