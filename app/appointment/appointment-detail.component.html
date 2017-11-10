@@ -27,7 +27,7 @@
         </GridLayout>
         <GridLayout columns="*" rows="*">
             <FlexboxLayout flexGrow="1" flexDirection="column" class="address-info">
-                <button class="checkin" [text]="'Check in'"></button>
+                <button class="checkin" (onTap)="checkinLocation()" [text]="'Check in'"></button>
             </FlexboxLayout>
         </GridLayout>
 
