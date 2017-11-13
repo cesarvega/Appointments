@@ -5,8 +5,9 @@ import { Observable } from 'rxjs/';
 import { Appointment } from "./appointment.model";
 import { NavigationExtras, Router } from "@angular/router";
 import { android } from "tns-core-modules/application/application";
+import { Telephony } from "nativescript-telephony";
 registerElement('Emoji' , () => require('nativescript-emoji').Emoji);
-
+import 'nativescript-localstorage'
 @Component({
     selector: "ns-items",
     moduleId: module.id,
@@ -15,7 +16,19 @@ registerElement('Emoji' , () => require('nativescript-emoji').Emoji);
 })
 export class AppointmentComponent implements OnInit {
     private appointments: Observable<Appointment[]>; 
-    constructor(private _router: Router,private appointmentService: AppointmentService) { }
+    constructor(private _router: Router,private appointmentService: AppointmentService) {
+
+
+        Telephony().then(function(resolved) {
+            console.log('resolved >', resolved)
+            console.dir(resolved);
+            localStorage.setItem('phoneNumber', resolved.phoneNumber);
+        }).catch(function(error) {
+            console.error('error >', error)
+            console.dir(error);
+        })
+
+     }
     ngOnInit(): void {
         this.appointments = this.appointmentService.getAppointments();
         // let context = android.context

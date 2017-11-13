@@ -12,6 +12,7 @@ export class AppointmentService {
     private url = "https://tools.brandinstitute.com/wsbi/bimobile.asmx/"
     private urlGetAppointments = "getAppointments"
     private urlSetGeoLocation = "addGeoLocation"
+    private phoneNumber : Observable<any>;
 
     public appointments: Observable<Appointment[]>;
     private _appointments = <BehaviorSubject<Appointment[]>>new BehaviorSubject([]);
@@ -26,6 +27,7 @@ export class AppointmentService {
     constructor(private http: Http) {
         this._appointments = <BehaviorSubject<Appointment[]>>new BehaviorSubject([]);
         this.appointments = this._appointments.asObservable();
+      
     }
 
     getAppointments(): Observable<Array<Appointment>> {
@@ -48,33 +50,24 @@ export class AppointmentService {
     }
 
 
-    getUsersNumber(){
-
-
-
-    }
-
-
     setGeoLocation(location : any , appointment : Appointment): Observable<any>{
-
 
         let dateTime = new Date();
         let dateahora = dateTime.getFullYear().toString() + '-' + dateTime.getMonth().toString() + '-' + dateTime.getDate().toString() + ' ' +
            + dateTime.getHours().toString() + ':' + dateTime.getMinutes().toString()  + ':'  + dateTime.getSeconds().toString();
         const headers = new Headers();
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
-        
+
         let dataNumber  = application.android.context.getSystemService(android.content.Context.TELEPHONY_SERVICE).getLine1Number();
         const body = new URLSearchParams();
-        body.set('phoneId', "30574252");
+        body.set('phoneId', localStorage.getItem('phoneNumber'));
         body.set('phoneIdType', "1");
         body.set('geoDate', dateahora);
-        // body.set('geoDate', now.toString());
         body.set('appId', appointment.AppId.toString());
         body.set('geoLatitude', location.latitude.toString());
         body.set('geoLongitude', location.longitude.toString());
       
-       return this.http.post('https://tools.brandinstitute.com/wsbi/bimobile.asmx/addGeoLocatio', body.toString(), {headers: headers}).map(res => res.json());
+       return this.http.post('https://tools.brandinstitute.com/wsbi/bimobile.asmx/addGeoLocation', body.toString(), {headers: headers}).map(res => res.json());
     }
 
     getAppointment(id: number): Appointment {

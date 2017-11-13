@@ -2,13 +2,14 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { AppointmentService } from "./appointment.service";
 import { Appointment } from "./appointment.model";
-
+import { Telephony } from 'nativescript-telephony';
 import { registerElement } from 'nativescript-angular/element-registry';
 import { MapView, Marker, Position } from 'nativescript-google-maps-sdk';
 
 import * as elementRegistryModule from 'nativescript-angular/element-registry';
 elementRegistryModule.registerElement("CardView", () => require("nativescript-cardview").CardView);
 import { isEnabled, enableLocationRequest, getCurrentLocation, watchLocation, distance, clearWatch } from "nativescript-geolocation";
+import { resetCSSProperties } from "tns-core-modules/ui/frame/frame";
 // Important - must register MapView plugin in order to use in Angular templates
 registerElement('MapView', () => MapView);
 
@@ -29,6 +30,7 @@ export class AppointmentDetailComponent implements OnInit {
     private CurrentLocation;
     private padding = [40, 40, 40, 40];
     private mapView: MapView;
+    private phoneNumber:any;
 
     lastCamera: String;
 
@@ -36,11 +38,12 @@ export class AppointmentDetailComponent implements OnInit {
         private appointmentService: AppointmentService,
         private route: ActivatedRoute) {
         this.appointment = <Appointment>JSON.parse(this.route.snapshot.params["appointment"]);
+       
 
     }
     ngOnInit(): void {
         // location services
-        this.getlocation();
+        // this.getlocation();
     }
 
  
