@@ -2,17 +2,20 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { AppointmentService } from "./appointment.service";
 import { Appointment } from "./appointment.model";
-import { Telephony } from 'nativescript-telephony';
-import { registerElement } from 'nativescript-angular/element-registry';
-import { MapView, Marker, Position } from 'nativescript-google-maps-sdk';
 
+import { Telephony } from 'nativescript-telephony';
+import { MapView, Marker, Position } from 'nativescript-google-maps-sdk';
+import * as camera from "nativescript-camera";
+import { registerElement } from 'nativescript-angular/element-registry';
 import * as elementRegistryModule from 'nativescript-angular/element-registry';
 elementRegistryModule.registerElement("CardView", () => require("nativescript-cardview").CardView);
 import { isEnabled, enableLocationRequest, getCurrentLocation, watchLocation, distance, clearWatch } from "nativescript-geolocation";
 import { resetCSSProperties } from "tns-core-modules/ui/frame/frame";
-// Important - must register MapView plugin in order to use in Angular templates
-registerElement('MapView', () => MapView);
 
+registerElement('MapView', () => MapView);
+import * as  base64 from "base-64";
+import * as utf8 from "utf8";
+import { fromAsset } from "tns-core-modules/image-source/image-source";
 
 @Component({
     selector: "ns-details",
@@ -31,6 +34,9 @@ export class AppointmentDetailComponent implements OnInit {
     private padding = [40, 40, 40, 40];
     private mapView: MapView;
     private phoneNumber:any;
+    private amount:any;
+    private expenseType:any;
+    private image:any= "https://play.nativescript.org/dist/assets/img/NativeScript_logo.png";
 
     lastCamera: String;
 
@@ -42,25 +48,38 @@ export class AppointmentDetailComponent implements OnInit {
 
     }
     ngOnInit(): void {
-        // location services
-        // this.getlocation();
+        camera.requestPermissions();
     }
 
  
 
-    checkinLocation() {
-        this.CurrentLocation =  this.getlocation();        
-      
+    addExpense() {       
+        var options = { width: 300, height: 300, keepAspectRatio: false, saveToGallery: false };
+        camera.takePicture(options)
+        .then((imageAsset) => {
+            console.log("Result is an image asset instance"); 
+            fromAsset(imageAsset).then(res => {
+                var myImageSource : any = res;
+                var base64 = myImageSource.toBase64String("jpeg", 100);
+                this.image  = "data:image/png;base64," + base64;                
+            })          
+        }).catch((err) => {
+            console.log("Error -> " + err.message);
+        });      
     }
 
-    //Map events
+   
+    saveExpense(){
+        this.appointmentService.saveExpense(this.appointment, this.image, this.expenseType, this.amount).subscribe(res =>{
+            console.log(res);            
+        })
+    }
+
+    
     onMapReady(event) {
-        console.log('Map Ready');
-
+        // console.log('Map Ready');
         this.mapView = event.object;
-
-        console.log("Setting a marker...");
-
+        // console.log("Setting a marker...");
         var marker = new Marker();
         marker.position = Position.positionFromLatLng(25.773338, -80.190072);
         marker.title = "Miami";
@@ -85,7 +104,7 @@ export class AppointmentDetailComponent implements OnInit {
     }
 
 
-    getlocation():any{
+    checkinLocation():any{
         getCurrentLocation({ desiredAccuracy: 3, updateDistance: 10, maximumAge: 20000, timeout: 20000 }).
         then(loc => {
             if (loc) {

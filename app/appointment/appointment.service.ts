@@ -33,8 +33,8 @@ export class AppointmentService {
     getAppointments(): Observable<Array<Appointment>> {
         let headers = new Headers({ 'content-type': 'application/x-www-form-urlencoded' });
         let body = new URLSearchParams();
-        body.set('phoneId', "3057427989");
-        body.set('phoneIdType', "1111111111");
+        body.set('phoneId', localStorage.getItem('phoneNumber'));
+        body.set('phoneIdType', "1");
         body.set('selDate', "10/16/2017");
 
         return this.http.post(this.url + this.urlGetAppointments, body.toString(), { headers: headers }).map(res => {
@@ -51,14 +51,11 @@ export class AppointmentService {
 
 
     setGeoLocation(location : any , appointment : Appointment): Observable<any>{
-
         let dateTime = new Date();
         let dateahora = dateTime.getFullYear().toString() + '-' + dateTime.getMonth().toString() + '-' + dateTime.getDate().toString() + ' ' +
            + dateTime.getHours().toString() + ':' + dateTime.getMinutes().toString()  + ':'  + dateTime.getSeconds().toString();
         const headers = new Headers();
-        headers.append('Content-Type', 'application/x-www-form-urlencoded');
-
-        let dataNumber  = application.android.context.getSystemService(android.content.Context.TELEPHONY_SERVICE).getLine1Number();
+        headers.append('Content-Type', 'application/x-www-form-urlencoded');      
         const body = new URLSearchParams();
         body.set('phoneId', localStorage.getItem('phoneNumber'));
         body.set('phoneIdType', "1");
@@ -67,7 +64,21 @@ export class AppointmentService {
         body.set('geoLatitude', location.latitude.toString());
         body.set('geoLongitude', location.longitude.toString());
       
-       return this.http.post('https://tools.brandinstitute.com/wsbi/bimobile.asmx/addGeoLocation', body.toString(), {headers: headers}).map(res => res.json());
+       return this.http.post(this.url + 'addGeoLocation', body.toString(), {headers: headers}).map(res => res.json());
+    }
+
+    saveExpense(appointment : Appointment, imageBase64: string, recType: string, recTotal: string): Observable<any>{        
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/x-www-form-urlencoded');       
+        const body = new URLSearchParams();
+        body.set('phoneId', localStorage.getItem('phoneNumber'));
+        body.set('phoneIdType', "1");
+        body.set('appId', appointment.AppId.toString());
+        body.set('recType', recType);
+        body.set('recTotal', recTotal);
+        body.set('imgType', 'base64');
+        body.set('img', imageBase64);      
+       return this.http.post(this.url + 'addAppReceipt', body.toString(), {headers: headers}).map(res => res.json());
     }
 
     getAppointment(id: number): Appointment {
