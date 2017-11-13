@@ -4,6 +4,9 @@ import { URLSearchParams } from "@angular/http"
 import { BehaviorSubject, Observable } from 'rxjs/';
 import { Appointment } from "./appointment.model";
 
+import * as application from 'application'
+
+declare let android: any
 @Injectable()
 export class AppointmentService {
     private url = "https://tools.brandinstitute.com/wsbi/bimobile.asmx/"
@@ -45,30 +48,33 @@ export class AppointmentService {
     }
 
 
+    getUsersNumber(){
 
-    setGeoLocation(geolaction: any): void {
 
-        let headers = new Headers({ 'content-type': 'application/x-www-form-urlencoded' });
-        let body = new URLSearchParams();
-        body.set('phoneId', "3057427989");
-        body.set('phoneIdType', "1111111111");
-        body.set('geoDate', "10/16/2017");
-        body.set('appId', "2222");
-        body.set('geoLatitude', this.latitude.toString());
-        body.set('geoLongitude', this.longitude.toString());
 
-        this.http.post('https://tools.brandinstitute.com/wsbi/bimobile.asmx/addGeoLocation', body, { headers: headers }).map(res => {
-            let data = res.json();
-            console.dir(data);
+    }
 
-            // res.json().map((obj : any) => {
-            //     let dateTime = new Date(obj.AppDate);
-            //     obj.AppDate = dateTime.getDate().toString() + ',' + this.monthNames[dateTime.getMonth()].toString() + '-' +
-            //      + ((dateTime.getHours() + 24 - 2) % 24).toString() + ':' 
-            //      + dateTime.getMinutes().toString() + ((dateTime.getHours() >= 12) ? " PM" : " AM").toString() ;            
-            // });
-            // return data;
-        });
+
+    setGeoLocation(location : any , appointment : Appointment): Observable<any>{
+
+
+        let dateTime = new Date();
+        let dateahora = dateTime.getFullYear().toString() + '-' + dateTime.getMonth().toString() + '-' + dateTime.getDate().toString() + ' ' +
+           + dateTime.getHours().toString() + ':' + dateTime.getMinutes().toString()  + ':'  + dateTime.getSeconds().toString();
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/x-www-form-urlencoded');
+        
+        let dataNumber  = application.android.context.getSystemService(android.content.Context.TELEPHONY_SERVICE).getLine1Number();
+        const body = new URLSearchParams();
+        body.set('phoneId', "30574252");
+        body.set('phoneIdType', "1");
+        body.set('geoDate', dateahora);
+        // body.set('geoDate', now.toString());
+        body.set('appId', appointment.AppId.toString());
+        body.set('geoLatitude', location.latitude.toString());
+        body.set('geoLongitude', location.longitude.toString());
+      
+       return this.http.post('https://tools.brandinstitute.com/wsbi/bimobile.asmx/addGeoLocatio', body.toString(), {headers: headers}).map(res => res.json());
     }
 
     getAppointment(id: number): Appointment {

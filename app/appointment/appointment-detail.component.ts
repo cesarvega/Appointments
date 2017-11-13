@@ -88,7 +88,13 @@ export class AppointmentDetailComponent implements OnInit {
             if (loc) {
                 console.log("Current location is: ");
                 console.dir(loc);
-                this.appointmentService.setGeoLocation(loc);
+                this.appointmentService.setGeoLocation(loc, this.appointment).subscribe(res => {
+                    console.log(res);
+                    ;
+                }, err =>{
+                    console.log(err);
+                    
+                });
             //   return loc;
             }
         }, (e) => {
