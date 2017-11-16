@@ -25,14 +25,17 @@
                 <Label [text]="appointment.cliCountry"></Label>
             </FlexboxLayout>
         </GridLayout>
+
         <GridLayout columns="*" rows="*">
             <FlexboxLayout flexGrow="1" flexDirection="column" class="address-info">
                 <button class="checkin" (onTap)="checkinLocation()" [text]="'Check in'"></button>
             </FlexboxLayout>
         </GridLayout>
 
-        <GridLayout>
-            <MapView height="200" #mapView [latitude]="latitude" [longitude]="longitude" [zoom]="zoom" [bearing]="bearing" [tilt]="tilt"
+        
+        <Label horizontalAlignment="center" textWrap="true" [text]="'appoinment location map'" class="lab-name"></Label>
+        <GridLayout>            
+            <MapView height="300" #mapView [latitude]="latitude"  [longitude]="longitude" [zoom]="zoom" [bearing]="bearing" [tilt]="tilt"
                 i-padding="50,50,50,50" [padding]="padding" (mapReady)="onMapReady($event)" (markerSelect)="onMarkerEvent($event)"
                 (markerBeginDragging)="onMarkerEvent($event)" (markerEndDragging)="onMarkerEvent($event)" (markerDrag)="onMarkerEvent($event)"
                 (markerInfoWindowTapped)="onMarkerEvent($event)" (coordinateTapped)="onCoordinateTapped($event)" (cameraChanged)="onCameraChanged($event)"></MapView>>

@@ -16,18 +16,19 @@ import 'nativescript-localstorage'
 })
 export class AppointmentComponent implements OnInit {
     private appointments: Observable<Appointment[]>; 
-    constructor(private _router: Router,private appointmentService: AppointmentService) {
+    constructor(private _router: Router,private appointmentService: AppointmentService) {}
+  
+    ngOnInit(): void {
         Telephony().then(function(resolved) {          
             localStorage.setItem('phoneNumber', resolved.phoneNumber);
         }).catch(function(error) {
             console.error('error >', error)
             console.dir(error);
         })
-     }
-    ngOnInit(): void {
         this.appointments = this.appointmentService.getAppointments();
     }
-    public onNavigationItemTap(appointment: Appointment) {
+    
+    onNavigationItemTap(appointment: Appointment) {
                 let appointmentdata = JSON.stringify(appointment);
                     this._router.navigate(['/appointment', appointmentdata]);                    
             }

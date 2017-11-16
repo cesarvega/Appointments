@@ -11,12 +11,13 @@ import * as elementRegistryModule from 'nativescript-angular/element-registry';
 elementRegistryModule.registerElement("CardView", () => require("nativescript-cardview").CardView);
 import { isEnabled, enableLocationRequest, getCurrentLocation, watchLocation, distance, clearWatch } from "nativescript-geolocation";
 import { resetCSSProperties } from "tns-core-modules/ui/frame/frame";
-
 registerElement('MapView', () => MapView);
-import * as  base64 from "base-64";
-import * as utf8 from "utf8";
-import { fromAsset } from "tns-core-modules/image-source/image-source";
-
+import { fromAsset, fromData } from "tns-core-modules/image-source/image-source";
+// import { android } from "tns-core-modules/application/application";
+declare var BitmapFactory: any
+declare var android;
+declare var ByteArrayOutputStream;
+declare var Bitmap;
 @Component({
     selector: "ns-details",
     moduleId: module.id,
@@ -27,16 +28,18 @@ export class AppointmentDetailComponent implements OnInit {
     private appointment: Appointment;
     private latitude = 25.773338;
     private longitude = -80.190072;
-    private zoom = 8;
+    private zoom = 13;
     private bearing = 0;
     private tilt = 0;
     private CurrentLocation;
     private padding = [40, 40, 40, 40];
     private mapView: MapView;
-    private phoneNumber:any;
-    private amount:any;
-    private expenseType:any;
-    private image:any= "https://play.nativescript.org/dist/assets/img/NativeScript_logo.png";
+    private phoneNumber: any;
+    private amount: any;
+    private expenseType: any;
+    private image : string;
+    private imagebase : string;
+    // private image: any = "https://play.nativescript.org/dist/assets/img/NativeScript_logo.png";
 
     lastCamera: String;
 
@@ -44,48 +47,105 @@ export class AppointmentDetailComponent implements OnInit {
         private appointmentService: AppointmentService,
         private route: ActivatedRoute) {
         this.appointment = <Appointment>JSON.parse(this.route.snapshot.params["appointment"]);
-       
-
-    }
-    ngOnInit(): void {
         camera.requestPermissions();
+        // <DEPRECATED-CODE>
+        // getCurrentLocation({ desiredAccuracy: 3, updateDistance: 1, maximumAge: 20000, timeout: 20000 }).
+        //     then(loc => {
+        //         if (loc) {                 
+        //             var marker = new Marker();
+        //             this.latitude = loc.latitude;
+        //             this.longitude = loc.longitude;
+        //             marker.position = Position.positionFromLatLng(this.latitude, this.longitude);
+        //             marker.title = "current location";
+        //             marker.snippet = "Usa";
+        //             marker.userData = { index: 1 };
+        //             this.mapView.addMarker(marker);
+        //             this.zoom = 13;                   
+        //         }
+        //     });
     }
 
- 
+    ngOnInit(): void {
+        let address = this.appointment.cliAddress1 +' '+ this.appointment.cliCity +' '+  this.appointment.cliState +' '+ this.appointment.cliZip;
+        // this.appointmentService.getAppointmentLocation(address).subscribe((res : any) =>{
+        //     // console.log("geoquery: "+ res);
+        //     console.dir(res);
+        //     // console.dir(res.results[0].geometry.location.lng);
+        //     let locationLatitud = res.results
+        //     var marker = new Marker();
+        //     this.latitude = res.results[0].geometry.location.lat;
+        //     this.longitude = res.results[0].geometry.location.lng;
+        //     marker.position = Position.positionFromLatLng(this.latitude, this.longitude);
+        //     marker.title = res.results[0].formatted_address;
+        //     marker.snippet = "";
+        //     marker.userData = { index: 1 };
+        //     this.mapView.addMarker(marker);
+        //     this.zoom = 18;
+        // })
+        // this.appointmentService.getExpensesByAppointmentId(this.appointment.AppId.toString()).subscribe( res => {
+        // console.log("res: " +res);
+        // console.dir(res);
+        // });
+    }
 
-    addExpense() {       
-        var options = { width: 300, height: 300, keepAspectRatio: false, saveToGallery: false };
+    addExpense() {
+        var options = { width: 80, height: 80, keepAspectRatio: false, saveToGallery: false };
         camera.takePicture(options)
-        .then((imageAsset) => {
-            console.log("Result is an image asset instance"); 
-            fromAsset(imageAsset).then(res => {
-                var myImageSource : any = res;
-                var base64 = myImageSource.toBase64String("jpeg", 100);
-                this.image  = "data:image/png;base64," + base64;                
-            })          
-        }).catch((err) => {
-            console.log("Error -> " + err.message);
-        });      
+            .then((imageAsset: any) => {                  
+                fromAsset(imageAsset).then(res => {                   
+                    var base64 = res.toBase64String("jpeg", 100);
+                    this.imagebase = base64;
+                    console.log("base64: " + base64.toString());                  
+                    this.image = "data:image/png;base64," + base64;
+                })
+            }).catch((err) => {
+                console.log("Error -> " + err.message);
+            });
     }
 
-   
-    saveExpense(){
-        this.appointmentService.saveExpense(this.appointment, this.image, this.expenseType, this.amount).subscribe(res =>{
-            console.log(res);            
-        })
+    saveExpense() {
+        this.appointmentService.saveExpense(this.appointment, this.imagebase, this.expenseType, this.amount).catch(err =>  { 
+            console.dir(err);            
+            return err; // observable needs to be returned or exception raised
+         }).subscribe(res => {
+            console.dir(res);
+        }), err => {
+            console.log("error: " + err.message);
+            console.dir(err);
+        }
     }
 
-    
-    onMapReady(event) {
-        // console.log('Map Ready');
+    checkinLocation(): any {
+        getCurrentLocation({ desiredAccuracy: 3, updateDistance: 1, maximumAge: 20000, timeout: 20000 }).
+            then(loc => {
+                if (loc) {
+                    console.log("Current location is: ");
+                    console.dir(loc);
+                    var marker = new Marker();
+                    this.latitude = loc.latitude;
+                    this.longitude = loc.longitude;
+                    marker.position = Position.positionFromLatLng(this.latitude, this.longitude);
+                    marker.title = "Miami";
+                    marker.snippet = "Usa";
+                    marker.userData = { index: 1 };
+                    this.mapView.addMarker(marker);
+                    this.zoom = 18;
+                    this.appointmentService.setGeoLocation(loc, this.appointment).subscribe(res => {
+                        console.log(res);
+                    }, err => {
+                        console.log(err);
+                    });
+                }
+            }, (e) => {
+                console.log("Error: " + e.message);
+            });
+    }
+
+    onMapReady(event) {    
         this.mapView = event.object;
-        // console.log("Setting a marker...");
-        var marker = new Marker();
-        marker.position = Position.positionFromLatLng(25.773338, -80.190072);
-        marker.title = "Miami";
-        marker.snippet = "Usa";
-        marker.userData = { index: 1 };
-        this.mapView.addMarker(marker);
+        this.mapView.settings.zoomGesturesEnabled = true;
+        this.mapView.settings.myLocationButtonEnabled = true;
+        this.mapView.settings.scrollGesturesEnabled = true;
     }
 
     onCoordinateTapped(args) {
@@ -103,25 +163,5 @@ export class AppointmentDetailComponent implements OnInit {
         this.lastCamera = JSON.stringify(args.camera);
     }
 
-
-    checkinLocation():any{
-        getCurrentLocation({ desiredAccuracy: 3, updateDistance: 10, maximumAge: 20000, timeout: 20000 }).
-        then(loc => {
-            if (loc) {
-                console.log("Current location is: ");
-                console.dir(loc);
-                this.appointmentService.setGeoLocation(loc, this.appointment).subscribe(res => {
-                    console.log(res);
-                    ;
-                }, err =>{
-                    console.log(err);
-                    
-                });
-            //   return loc;
-            }
-        }, (e) => {
-            console.log("Error: " + e.message);            
-        });
-    } 
 
 }
