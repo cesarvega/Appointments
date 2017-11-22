@@ -1,6 +1,7 @@
-<ActionBar title="BI Appointments" class="action-bar" color="white" backgroundColor="#F9A11F">
+<ActionBar title="BI Appointments" class="action-bar" color="white" backgroundColor="#4c70f5">
     </ActionBar>
-    <StackLayout backgroundColor="#F9A11F">
+    <StackLayout backgroundColor="#4c70f5">
+        <!-- <ListView class="list-group" [items]="appointments "  > -->
         <ListView class="list-group" [items]="appointments  | async"  >
             <ng-template let-appointment="item" >
                 <StackLayout (onTap)="onNavigationItemTap(appointment)" >

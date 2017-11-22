@@ -6,7 +6,7 @@
   "nativescript": {
     "id": "org.nativescript.APPOINTMENTS",
     "tns-android": {
-      "version": "3.3.0"
+      "version": "3.4.0-2017-10-31-1"
     }
   },
   "dependencies": {
@@ -31,6 +31,7 @@
     "reflect-metadata": "~0.1.8",
     "rxjs": "~5.4.2",
     "tns-core-modules": "~3.3.0",
+    "url-search-params-polyfill": "^2.0.1",
     "zone.js": "~0.8.2"
   },
   "devDependencies": {

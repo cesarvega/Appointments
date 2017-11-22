@@ -8,6 +8,8 @@ import { android } from "tns-core-modules/application/application";
 import { Telephony } from "nativescript-telephony";
 registerElement('Emoji' , () => require('nativescript-emoji').Emoji);
 import 'nativescript-localstorage'
+import { LoopAppointmentService } from "./loop/loop-appointment.service";
+import { LoopAppointment } from "./loop/loop-appointment.model";
 @Component({
     selector: "ns-items",
     moduleId: module.id,
@@ -16,7 +18,8 @@ import 'nativescript-localstorage'
 })
 export class AppointmentComponent implements OnInit {
     private appointments: Observable<Appointment[]>; 
-    constructor(private _router: Router,private appointmentService: AppointmentService) {}
+    // private appointments:  Observable<LoopAppointment[]>; 
+    constructor(private _router: Router,private appointmentService: AppointmentService,private loopAppointmentService: LoopAppointmentService) {}
   
     ngOnInit(): void {
         Telephony().then(function(resolved) {          
@@ -25,6 +28,13 @@ export class AppointmentComponent implements OnInit {
             console.error('error >', error)
             console.dir(error);
         })
+        // this.loopAppointmentService.loopGetAppiontments().catch(err =>  { 
+        //     console.dir(err);            
+        //     return err; // observable needs to be returned or exception raised
+        //  }).subscribe((res: Observable<Array<LoopAppointment>>) => {
+        //     console.dir(res);
+        //     this.appointments = res;            
+        // });
         this.appointments = this.appointmentService.getAppointments();
     }
     

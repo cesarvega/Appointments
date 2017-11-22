@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs/';
 import { Appointment } from "./appointment.model";
 
 import * as application from 'application'
+import { LoopAppointment } from "./loop/loop-appointment.model";
 
 declare let android: any
 @Injectable()
@@ -12,6 +13,7 @@ export class AppointmentService {
     private url = "https://tools.brandinstitute.com/wsbi/bimobile.asmx/"
     private urlGetAppointments = "getAppointments"
     private urlSetGeoLocation = "addGeoLocation"
+    private getExpensesByAppId = "getExpensesByAppointmentId"
     private phoneNumber: Observable<any>;
 
     public appointments: Observable<Appointment[]>;
@@ -48,6 +50,7 @@ export class AppointmentService {
             return data;
         });
     }
+    
     getAppointmentLocation(appointmentAddress): Observable<Array<Appointment>> {
         return this.http.get("http://maps.googleapis.com/maps/api/geocode/json?address=" + appointmentAddress).map(res => res.json());
     }
@@ -77,21 +80,20 @@ export class AppointmentService {
         body.set('appId', appointment.AppId.toString());
         // body.set('recType', recType);  use when real values in number come from dropdown
         body.set('recType', '1');
-        body.set('recTotal', '18');
+        body.set('recTotal', recTotal);
         body.set('imgType', 'base64');
         body.set('img', imageBase64);
         return this.http.post(this.url + 'addAppReceiptString', body.toString(), { headers: headers }).map(res => res.json());
     }
 
-    getExpensesByAppointmentId(appid: string): Observable<any> {
+    getExpensesByAppointmentId(appid: string) {
         let headers = new Headers({ 'content-type': 'application/x-www-form-urlencoded' });
         let body = new URLSearchParams();
         body.set('phoneId', localStorage.getItem('phoneNumber'));
         body.set('phoneIdType', "1");
         body.set('appid', appid);
-        return this.http.post(this.url + 'getExpensesByAppointmentId', body.toString(), { headers: headers }).map(res => {
-            res.json();
-        });
+        return this.http.post(this.url + 'getExpensesByAppointmentId', body.toString(), { headers: headers }).map(res => res.json());
     }
+
 }
 
