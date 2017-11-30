@@ -1,19 +1,20 @@
 
 .cardStyle {
-    background-color: #3489db;
+    background-color: #042fd0;
     color: #ffffff;
 }
 
 
 .date {    
-    font-size: 65;
+    font-size: 75;
     color: #ffffff;   
     text-align: center;
+    padding: 10;
 
 }
 
 .date-month {
-    font-size: 20;
+    font-size: 18;
     color: #FFFFFF;
     text-align: center;
 
@@ -30,9 +31,9 @@
 
 .lab-sub-name {
     padding-left: 10;
-    font-size: 15;
+    font-size: 17;
     font-weight: 400;
-    color: rgb(75, 75, 75);
+    color: rgb(196, 0, 147);
     text-align: center;
     padding-bottom: 5;
 }
@@ -81,4 +82,10 @@
   .expense {
     background-color: lightgreen;
     color: #000000;
+  }
+
+  .company {
+   text-align: center;
+   font-weight: 500;
+   font-size: 24;
   }

@@ -30,8 +30,12 @@ declare var Bitmap;
 export class AppointmentDetailComponent implements OnInit {
     private appointment: Appointment;
     private expenses: Array<object>;
-    private latitude = 25.773338;
-    private longitude = -80.190072;
+    private latitude = 25.769490
+    private longitude = -80.195224
+    private latitude2 = 25.769859;
+    private longitude2 = -80.19230;
+    // private latitude2 = 25.774394;
+    // private longitude2 = -80.141852;
     private zoom = 16;
     private bearing = 0;
     private tilt = 0;
@@ -57,15 +61,27 @@ export class AppointmentDetailComponent implements OnInit {
     ngOnInit(): void {
         let address = this.appointment.cliAddress1 + ' ' + this.appointment.cliCity + ' ' + this.appointment.cliState + ' ' + this.appointment.cliZip;
         this.appointmentService.getAppointmentLocation(address).subscribe((res: any) => {
+
+            var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+
             var marker = new Marker();
             this.latitude = res.results[0].geometry.location.lat;
             this.longitude = res.results[0].geometry.location.lng;
             marker.position = Position.positionFromLatLng(this.latitude, this.longitude);
             marker.title = res.results[0].formatted_address;
             marker.snippet = "";
+            // marker.icon = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
             marker.userData = { index: 1 };
             this.mapView.addMarker(marker);
             this.zoom = 13;
+
+            // var marker2 = new Marker();
+            // marker2.position = Position.positionFromLatLng(this.latitude, this.longitude);
+            // marker2.title = "Custom";
+            // // marker2.icon = 'https://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=bus|FFFF00';
+            // marker2.snippet = "customized";
+            // marker2.userData = { index: 1 };
+            // this.mapView.addMarker(marker2);
         })
 
         // this.appointmentService.loopGetAppiontments().catch(err =>  { 
@@ -77,62 +93,21 @@ export class AppointmentDetailComponent implements OnInit {
         // })
 
         this.appointmentService.getExpensesByAppointmentId(this.appointment.AppId.toString()).subscribe(res => {
-            // console.log("res: " + res);
-            // console.dir(res);
-            // if (res.length > 0) {                
-            //     this.expenses = res.map( obj =>  {
-            //         obj.img.replace(/\-/g,'+');
-            //     });
-            // }
             this.expenses = res;
         });
     }
 
 
     addExpense() {
-
-        var options = { width: 100, height: 100, keepAspectRatio: true, saveToGallery: false };
+        var options = { width: 150, height: 150, keepAspectRatio: true, saveToGallery: false };
         this.imagebase = '';
         this.image = '';
         camera.takePicture(options)
             .then((imageAsset: any) => {
-
-                // var file = new java.io.File(imageAsset.android);
-                // var size = file.length();
-                // var bytes = new byte[size];
-                // try {
-                //      var buf = new java.io.BufferedInputStream(new java.io.FileInputStream(file));
-                //      buf.read(bytes, 0, bytes.length);
-                //      //do something
-                //      buf.close();
-                // } catch (ex) {
-                //      console.log(ex);
-                // }
-                
-                // let bm = android.graphics.BitmapFactory.decodeFile(imageAsset.android);
-                // let baos = new java.io.ByteArrayOutputStream();
-                // bm.compress(android.graphics.Bitmap.CompressFormat.JPEG, 100, baos);
-
-                // let  b = baos.toByteArray();
-                // let encImage =android.util.Base64.encodeToString(b,  android.util.Base64.NO_WRAP)
-                
-                // this.imagebase = encImage;
-                // this.image = "data:image/png;base64," + this.imagebase;
-
-                // this.imagebase = this.imagebase.replace(/\+/g,'-');
-
-
-                // this.imagebase = this.imagebase.replace('/', 'AC');
-                // this.imagebase = this.imagebase.replace()
-                // const data = file.getBytes("UTF-8");
-                // const base64 = android.util.Base64.encodeToString(data,  android.util.Base64.NO_WRAP);               
                 fromAsset(imageAsset).then(res => {
-                    // this.imagebase = android.util.Base64.decode(res, android.util.Base64.DEFAULT);
                     this.imagebase = res.toBase64String("jpg");
                     this.image = "data:image/png;base64," + this.imagebase;
-                    this.imagebase = this.imagebase.replace(/\+/g,'-');
-                    
-                    // console.log("base64: " + base64.toString());                  
+                    this.imagebase = this.imagebase.replace(/\+/g, '-');
                 })
             }).catch((err) => {
                 console.log("Error -> " + err.message);
@@ -146,6 +121,7 @@ export class AppointmentDetailComponent implements OnInit {
             console.dir(err);
             return err; // observable needs to be returned or exception raised
         }).subscribe(res => {
+            this.imagebase = null;
             console.dir(res);
         }), err => {
             console.log("error: " + err.message);
@@ -157,22 +133,27 @@ export class AppointmentDetailComponent implements OnInit {
         getCurrentLocation({ desiredAccuracy: 3, updateDistance: 1, maximumAge: 20000, timeout: 20000 }).
             then(loc => {
                 if (loc) {
-                    console.log("Current location is: ");
-                    console.dir(loc);
                     var marker = new Marker();
+                    var appointmentPosition = Position.positionFromLatLng(this.latitude2, this.longitude2);
                     this.latitude = loc.latitude;
                     this.longitude = loc.longitude;
                     marker.position = Position.positionFromLatLng(this.latitude, this.longitude);
-                    marker.title = "Miami";
-                    marker.snippet = "Usa";
-                    marker.userData = { index: 1 };
-                    this.mapView.addMarker(marker);
-                    this.zoom = 16;
-                    this.appointmentService.setGeoLocation(loc, this.appointment).subscribe(res => {
-                        console.log(res);
-                    }, err => {
-                        console.log(err);
-                    });
+                    var distance = this.calculatDistanceBetweenpoints(marker.position, appointmentPosition);
+                  
+                    if (distance < 804.672) {
+                        marker.title = "Miami";
+                        marker.snippet = "Usa";
+                        marker.userData = { index: 1 };
+                        this.mapView.addMarker(marker);
+                        this.zoom = 16;
+
+                        this.appointmentService.setGeoLocation(loc, this.appointment).subscribe(res => {
+                            console.log(res);
+                        }, err => {
+                            console.log(err);
+                        });
+                    }
+            
                 }
             }, (e) => {
                 console.log("Error: " + e.message);
@@ -201,5 +182,19 @@ export class AppointmentDetailComponent implements OnInit {
         // this.lastCamera = JSON.stringify(args.camera);
     }
 
+    calculatDistanceBetweenpoints(p1, p2) {
+        var rad = function (x) {
+            return x * Math.PI / 180;
+        };
+        var R = 6378137; // Earth’s mean radius in meter
+        var dLat = rad(p2.latitude - p1.latitude);
+        var dLong = rad(p2.longitude - p1.longitude);
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(rad(p1.latitude)) * Math.cos(rad(p2.latitude)) *
+            Math.sin(dLong / 2) * Math.sin(dLong / 2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var d = R * c;
+        return d; // returns the distance in meter          
+    }
 
 }

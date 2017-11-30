@@ -6,10 +6,15 @@ import { Appointment } from "./appointment.model";
 import { NavigationExtras, Router } from "@angular/router";
 import { android } from "tns-core-modules/application/application";
 import { Telephony } from "nativescript-telephony";
-registerElement('Emoji' , () => require('nativescript-emoji').Emoji);
+registerElement('Emoji', () => require('nativescript-emoji').Emoji);
 import 'nativescript-localstorage'
 import { LoopAppointmentService } from "./loop/loop-appointment.service";
 import { LoopAppointment } from "./loop/loop-appointment.model";
+
+
+import { DatePicker } from "ui/date-picker";
+import { EventData } from "data/observable";
+
 @Component({
     selector: "ns-items",
     moduleId: module.id,
@@ -17,14 +22,16 @@ import { LoopAppointment } from "./loop/loop-appointment.model";
     templateUrl: "appointment.component.html"
 })
 export class AppointmentComponent implements OnInit {
-    private appointments: Observable<Appointment[]>; 
+    private stringDate: string;
+    private appointments: Observable<Appointment[]>;
     // private appointments:  Observable<LoopAppointment[]>; 
-    constructor(private _router: Router,private appointmentService: AppointmentService,private loopAppointmentService: LoopAppointmentService) {}
-  
+    private isItemVisible = false;
+    constructor(private _router: Router, private appointmentService: AppointmentService, private loopAppointmentService: LoopAppointmentService) { }
+
     ngOnInit(): void {
-        Telephony().then(function(resolved) {          
+        Telephony().then(function (resolved) {
             localStorage.setItem('phoneNumber', resolved.phoneNumber);
-        }).catch(function(error) {
+        }).catch(function (error) {
             console.error('error >', error)
             console.dir(error);
         })
@@ -35,11 +42,61 @@ export class AppointmentComponent implements OnInit {
         //     console.dir(res);
         //     this.appointments = res;            
         // });
-        this.appointments = this.appointmentService.getAppointments();
+        let date =  new Date();      
+        this.setAppointmentDate(date);           
     }
-    
+
+    setAppointmentDate(date : Date){
+        let day = date.getDate();
+        let month = date.getMonth() + 1;
+        let year = date.getFullYear();
+        this.stringDate = month.toString() + "/" + day.toString() + "/" + year.toString();
+        this.appointments = this.appointmentService.getAppointments(this.stringDate);
+    }
+
     onNavigationItemTap(appointment: Appointment) {
-                let appointmentdata = JSON.stringify(appointment);
-                    this._router.navigate(['/appointment', appointmentdata]);                    
-            }
+        let appointmentdata = JSON.stringify(appointment);
+        this._router.navigate(['/appointment', appointmentdata]);
+    }
+
+    setDate() {        
+        this.isItemVisible = (this.isItemVisible)? false : true;
+    }
+
+    onPickerLoaded(args) {
+        let datePicker = <DatePicker>args.object;
+        datePicker.date =  new Date(Date.now());
+        datePicker.minDate = new Date(1975, 0, 29);
+        datePicker.maxDate = new Date(2045, 4, 12);
+
+        // datePicker.year = 1980;
+        // datePicker.month = 2;
+        // datePicker.day = 9;
+    }
+
+    onDateChanged(args) {
+        console.log("Date changed");
+        console.log("New value: " + args.value);
+        // console.log("Old value: " + args.oldValue);
+        this.setAppointmentDate(args.value);
+    }
+
+    onDayChanged(args) {
+        // console.log("Day changed");
+        // console.log("New value: " + args.value);
+        // console.log("Old value: " + args.oldValue);
+    }
+
+    onMonthChanged(args) {
+        // console.log("Month changed");
+        // console.log("New value: " + args.value);
+        // console.log("Old value: " + args.oldValue);
+    }
+
+    onYearChanged(args) {
+        // console.log("Year changed");
+        // console.log("New value: " + args.value);
+        // console.log("Old value: " + args.oldValue);
+    }
+
 }

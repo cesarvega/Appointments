@@ -21,8 +21,8 @@ export class AppointmentService {
     private dataStore: {
         appointments: Appointment[]
     };
-    private latitude = 25.773338;
-    private longitude = -80.190072;
+    // private latitude = 25.773338;
+    // private longitude = -80.190072;
     private monthNames = ["Jan", "Febr", "Mar", "Apr", "May", "Jun",
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     ];
@@ -32,12 +32,12 @@ export class AppointmentService {
         this.appointments = this._appointments.asObservable();
     }
 
-    getAppointments(): Observable<Array<Appointment>> {
+    getAppointments(date: string): Observable<Array<Appointment>> {
         let headers = new Headers({ 'content-type': 'application/x-www-form-urlencoded' });
         let body = new URLSearchParams();
         body.set('phoneId', localStorage.getItem('phoneNumber'));
         body.set('phoneIdType', "1");
-        body.set('selDate', "10/16/2017");
+        body.set('selDate', date);
 
         return this.http.post(this.url + this.urlGetAppointments, body.toString(), { headers: headers }).map(res => {
             let data = res.json();
@@ -50,6 +50,8 @@ export class AppointmentService {
             return data;
         });
     }
+
+
     
     getAppointmentLocation(appointmentAddress): Observable<Array<Appointment>> {
         return this.http.get("http://maps.googleapis.com/maps/api/geocode/json?address=" + appointmentAddress).map(res => res.json());
@@ -83,7 +85,10 @@ export class AppointmentService {
         body.set('recTotal', recTotal);
         body.set('imgType', 'base64');
         body.set('img', imageBase64);
-        return this.http.post(this.url + 'addAppReceiptString', body.toString(), { headers: headers }).map(res => res.json());
+        return this.http.post(this.url + 'addAppReceiptString', body.toString(), { headers: headers }).map(res => {
+            res.json();
+            imageBase64 = null;
+        });
     }
 
     getExpensesByAppointmentId(appid: string) {

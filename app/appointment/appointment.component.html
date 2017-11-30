@@ -1,4 +1,14 @@
 <ActionBar title="BI Appointments" class="action-bar" color="white" backgroundColor="#4c70f5">
+        <ActionItem *ngIf="true" (tap)="setDate()"
+        ios.systemIcon="2" android.systemIcon="ic_menu_my_calendar"
+        ios.position="right"></ActionItem>
+    
+      <!-- <ActionItem *ngIf="true" (tap)="onSave()" 
+        ios.systemIcon="3" android.systemIcon="ic_menu_save"
+        ios.position="right"></ActionItem>
+    
+      <ActionItem *ngIf="true" (tap)="onCancel()"
+        ios.systemIcon="1" android.systemIcon="ic_menu_close_clear_cancel"></ActionItem> -->
     </ActionBar>
     <StackLayout backgroundColor="#4c70f5">
         <!-- <ListView class="list-group" [items]="appointments "  > -->
@@ -20,5 +30,9 @@
                     </GridLayout>
                 </StackLayout>
             </ng-template>
-        </ListView>
+        </ListView>      
     </StackLayout>
+    <DatePicker backgroundColor="#FFFFFF" (loaded)="onPickerLoaded($event)" 
+    (dateChange)="onDateChanged($event)" [visibility]="isItemVisible ? 'visible' : 'collapsed'"
+    (dayChange)="onDayChanged($event)"  (monthChange)="onMonthChanged($event)" 
+    (yearChange)="onYearChanged($event)" horizontalAligment="bottom" verticalAlignment="center"></DatePicker>
