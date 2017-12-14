@@ -48,7 +48,7 @@ export class AppointmentComponent implements OnInit {
 
     setAppointmentDate(date : Date){
         let day = date.getDate();
-        let month = date.getMonth() + 1;
+        let month = date.getMonth() + 1;// from 0 - 11
         let year = date.getFullYear();
         this.stringDate = month.toString() + "/" + day.toString() + "/" + year.toString();
         this.appointments = this.appointmentService.getAppointments(this.stringDate);
@@ -68,10 +68,6 @@ export class AppointmentComponent implements OnInit {
         datePicker.date =  new Date(Date.now());
         datePicker.minDate = new Date(1975, 0, 29);
         datePicker.maxDate = new Date(2045, 4, 12);
-
-        // datePicker.year = 1980;
-        // datePicker.month = 2;
-        // datePicker.day = 9;
     }
 
     onDateChanged(args) {

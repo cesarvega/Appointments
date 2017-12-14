@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { AppointmentService } from "./appointment.service";
 import { Appointment } from "./appointment.model";
-
+import * as Toast from "nativescript-toast";
 import { Telephony } from 'nativescript-telephony';
 import { MapView, Marker, Position } from 'nativescript-google-maps-sdk';
 import * as camera from "nativescript-camera";
@@ -11,7 +11,7 @@ import * as elementRegistryModule from 'nativescript-angular/element-registry';
 elementRegistryModule.registerElement("CardView", () => require("nativescript-cardview").CardView);
 import { isEnabled, enableLocationRequest, getCurrentLocation, watchLocation, distance, clearWatch } from "nativescript-geolocation";
 import { resetCSSProperties } from "tns-core-modules/ui/frame/frame";
-registerElement('MapView', () => MapView);
+registerElement('MapView', () => require("nativescript-google-maps-sdk").MapView);
 import { fromAsset, fromData } from "tns-core-modules/image-source/image-source";
 import { LoopAppointment } from "./loop/loop-appointment.model";
 // import { android } from "tns-core-modules/application/application";
@@ -30,8 +30,8 @@ declare var Bitmap;
 export class AppointmentDetailComponent implements OnInit {
     private appointment: Appointment;
     private expenses: Array<object>;
-    private latitude = 25.769490
-    private longitude = -80.195224
+    private latitude = 25.769490;
+    private longitude = -80.195224;
     private latitude2 = 25.769859;
     private longitude2 = -80.19230;
     // private latitude2 = 25.774394;
@@ -59,44 +59,12 @@ export class AppointmentDetailComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        let address = this.appointment.cliAddress1 + ' ' + this.appointment.cliCity + ' ' + this.appointment.cliState + ' ' + this.appointment.cliZip;
-        this.appointmentService.getAppointmentLocation(address).subscribe((res: any) => {
 
-            var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
-
-            var marker = new Marker();
-            this.latitude = res.results[0].geometry.location.lat;
-            this.longitude = res.results[0].geometry.location.lng;
-            marker.position = Position.positionFromLatLng(this.latitude, this.longitude);
-            marker.title = res.results[0].formatted_address;
-            marker.snippet = "";
-            // marker.icon = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
-            marker.userData = { index: 1 };
-            this.mapView.addMarker(marker);
-            this.zoom = 13;
-
-            // var marker2 = new Marker();
-            // marker2.position = Position.positionFromLatLng(this.latitude, this.longitude);
-            // marker2.title = "Custom";
-            // // marker2.icon = 'https://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=bus|FFFF00';
-            // marker2.snippet = "customized";
-            // marker2.userData = { index: 1 };
-            // this.mapView.addMarker(marker2);
-        })
-
-        // this.appointmentService.loopGetAppiontments().catch(err =>  { 
-        //     console.dir(err);            
-        //     return err; // observable needs to be returned or exception raised
-        //  }).subscribe(res => {
-        //     console.dir("appointmentsloop : "+res);
-
-        // })
-
-        this.appointmentService.getExpensesByAppointmentId(this.appointment.AppId.toString()).subscribe(res => {
-            this.expenses = res;
-        });
     }
 
+    showToast(message: string) {
+        Toast.makeText(message, "long").show();
+    }
 
     addExpense() {
         var options = { width: 150, height: 150, keepAspectRatio: true, saveToGallery: false };
@@ -111,10 +79,9 @@ export class AppointmentDetailComponent implements OnInit {
                 })
             }).catch((err) => {
                 console.log("Error -> " + err.message);
+                this.showToast('Something went wrong please try again : ' + err.message);
             });
     }
-
-
 
     saveExpense() {
         this.appointmentService.saveExpense(this.appointment, this.imagebase, this.expenseType, this.amount).catch(err => {
@@ -122,9 +89,11 @@ export class AppointmentDetailComponent implements OnInit {
             return err; // observable needs to be returned or exception raised
         }).subscribe(res => {
             this.imagebase = null;
+            this.showToast('The Expense was sucessfully add it');
             console.dir(res);
         }), err => {
             console.log("error: " + err.message);
+            this.showToast('Something went wrong please try again : ' + err.message);
             console.dir(err);
         }
     }
@@ -134,26 +103,38 @@ export class AppointmentDetailComponent implements OnInit {
             then(loc => {
                 if (loc) {
                     var marker = new Marker();
-                    var appointmentPosition = Position.positionFromLatLng(this.latitude2, this.longitude2);
+                    // var appointmentPosition = Position.positionFromLatLng(25.773694, -80.285451);
+                    var appointmentPosition = Position.positionFromLatLng(this.latitude, this.longitude);
                     this.latitude = loc.latitude;
                     this.longitude = loc.longitude;
-                    marker.position = Position.positionFromLatLng(this.latitude, this.longitude);
+                    // marker.position = Position.positionFromLatLng(43.362684, -71.103530);
+                    marker.position = Position.positionFromLatLng(loc.latitude, loc.longitude);
                     var distance = this.calculatDistanceBetweenpoints(marker.position, appointmentPosition);
-                  
-                    if (distance < 804.672) {
-                        marker.title = "Miami";
-                        marker.snippet = "Usa";
-                        marker.userData = { index: 1 };
-                        this.mapView.addMarker(marker);
-                        this.zoom = 16;
+                    marker.title = "Current Position";
+                    marker.snippet = "Usa";
+                    marker.userData = { index: 1 };
+                    marker.color = 'green';
 
-                        this.appointmentService.setGeoLocation(loc, this.appointment).subscribe(res => {
-                            console.log(res);
+                    this.zoom = this.zoomDistance(distance);
+
+                    // this.zoom = 13;
+                    if (distance < 804.672) {
+                        this.appointmentService.setGeoLocation(marker.position, this.appointment).subscribe(res => {
+                            // this.appointmentService.setGeoLocation(loc, this.appointment).subscribe(res => {
+                            this.mapView.addMarker(marker);
+                            this.showToast('Your location has been chekin');
                         }, err => {
                             console.log(err);
                         });
+                    } else {
+                        marker.title = "Far from appointment location";
+                        marker.snippet = "Usa";
+                        marker.userData = { index: 1 };
+                        marker.color = 'yellow';
+                        this.mapView.addMarker(marker);
+                        // this.zoom = 13;
+                        this.showToast('Your are too far from check in location address');
                     }
-            
                 }
             }, (e) => {
                 console.log("Error: " + e.message);
@@ -162,9 +143,66 @@ export class AppointmentDetailComponent implements OnInit {
 
     onMapReady(event) {
         this.mapView = event.object;
+
         this.mapView.settings.zoomGesturesEnabled = true;
+
+        this.mapView.settings.compassEnabled = true;
+
+        this.mapView.settings.indoorLevelPickerEnabled = true;
+
+        this.mapView.settings.mapToolbarEnabled = true;
+
         this.mapView.settings.myLocationButtonEnabled = true;
+
+        this.mapView.settings.rotateGesturesEnabled = true;
+
         this.mapView.settings.scrollGesturesEnabled = true;
+
+        this.mapView.settings.tiltGesturesEnabled = true;
+
+        this.mapView.settings.zoomControlsEnabled = true;
+
+        let address = this.appointment.cliAddress1 + ' ' + this.appointment.cliCity + ' ' + this.appointment.cliState + ' ' + this.appointment.cliZip;
+        this.appointmentService.getAppointmentLocation(address).subscribe((res: any) => {
+            var marker = new Marker();
+            this.latitude = res.results[0].geometry.location.lat;
+            this.longitude = res.results[0].geometry.location.lng;
+            // this.latitude = 25.854050;            
+            // this.longitude = -80.233266;
+            marker.position = Position.positionFromLatLng(this.latitude, this.longitude);
+
+            // console.dir(marker.position);
+
+            marker.title = res.results[0].formatted_address;
+            marker.snippet = "";
+
+            marker.color = 'blue'
+            marker.userData = { index: 1 };
+
+            this.zoom = 10;
+
+            // var marker2 = new Marker();
+            // marker2.position = Position.positionFromLatLng(43.362684, -71.103530);
+            // marker2.title = "Custom";
+            // // marker2.icon = 'https://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=bus|FFFF00';
+            // marker2.snippet = "customized";
+            // // marker2.color= 'red'
+            // marker2.userData = { index: 1 };
+            // this.mapView.addMarker(marker, marker2);
+            this.mapView.addMarker(marker);
+        })
+
+        // this.appointmentService.loopGetAppiontments().catch(err =>  { 
+        //     console.dir(err);            
+        //     return err; // observable needs to be returned or exception raised
+        //  }).subscribe(res => {
+        //     console.dir("appointmentsloop : "+res);
+
+        // })
+
+        this.appointmentService.getExpensesByAppointmentId(this.appointment.AppId.toString()).subscribe(res => {
+            this.expenses = res;
+        });
     }
 
     onCoordinateTapped(args) {
@@ -195,6 +233,80 @@ export class AppointmentDetailComponent implements OnInit {
         var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         var d = R * c;
         return d; // returns the distance in meter          
+    }
+
+
+    zoomDistance(distance) {
+        let zoom = 13;
+        let factor = 5;
+        switch (true) {
+
+            case  (distance < 1128.497220) :
+                zoom = 20 -  factor;
+                break;
+            case  (distance < 2256.994440) :
+                zoom = 19 -  factor;
+                break;
+            case  (distance < 4513.988880) :
+                zoom = 18 -  factor;
+                break;
+            case  (distance < 9027.977761) :
+                zoom = 17 -  factor;
+                break;
+            case  (distance < 18055.955520) :
+                zoom = 16 -  factor;
+                break;
+            case  (distance < 36111.911040) :
+                zoom = 15 -  factor;
+                break;
+            case  (distance < 72223.822090) :
+                zoom = 14 -  factor;
+                break;
+            case  (distance < 144447.644200) :
+                zoom = 13 -  factor;
+                break;
+            case  (distance < 288895.288400) :
+                zoom = 12 -  factor;
+                break;
+            case  (distance < 577790.576700) :
+                zoom = 11 -  factor;
+                break;
+            case  (distance < 1155581.153000) :
+                zoom = 10 -  factor;
+                break;
+            case  (distance < 2311162.307000) :
+                zoom = 9 -  factor;
+                break;
+            case  (distance < 4622324.614000) :
+                zoom = 8 -  factor;
+                break;
+            case  (distance < 9244649.227000) :
+                zoom = 7 -  factor;
+                break;
+            case  (distance < 18489298.450000) :
+                zoom = 6 -  factor;
+                break;
+            case  (distance < 36978596.910000) :
+                zoom = 5 ;
+                break;
+            case  (distance < 73957193.820000) :
+                zoom = 4 ;
+                break;
+            case  (distance < 147914387.600000) :
+                zoom = 3 ;
+                break;
+            case  (distance < 295828775.300000) :
+                zoom = 2 ;
+                break;
+            case  (distance < 591657550.500000) :
+                zoom = 1 ;
+                break;
+
+            default:
+                break;
+        }
+
+        return zoom
     }
 
 }
