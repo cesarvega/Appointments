@@ -89,7 +89,7 @@ export class AppointmentDetailComponent implements OnInit {
             return err; // observable needs to be returned or exception raised
         }).subscribe(res => {
             this.imagebase = null;
-            this.showToast('The Expense was sucessfully add it');
+            this.showToast('The Expense was successfully add it');
             console.dir(res);
         }), err => {
             console.log("error: " + err.message);
@@ -122,19 +122,20 @@ export class AppointmentDetailComponent implements OnInit {
                         this.appointmentService.setGeoLocation(marker.position, this.appointment).subscribe(res => {
                             // this.appointmentService.setGeoLocation(loc, this.appointment).subscribe(res => {
                             this.mapView.addMarker(marker);
-                            this.showToast('Your location has been chekin');
+                            this.showToast(' You have successfully checked in your location');
                         }, err => {
                             console.log(err);
                         });
                     } else {
-                        marker.title = "Far from appointment location";
-                        marker.snippet = "Usa";
+                        marker.title = "Your are too far away from the check in location address";
+                        // marker.snippet = "";
                         marker.userData = { index: 1 };
                         marker.color = 'yellow';
                         this.mapView.addMarker(marker);
                         // this.zoom = 13;
-                        this.showToast('Your are too far from check in location address');
+                        this.showToast('Your are too far away from check in location address');
                     }
+                    marker.showInfoWindow();
                 }
             }, (e) => {
                 console.log("Error: " + e.message);
@@ -190,6 +191,7 @@ export class AppointmentDetailComponent implements OnInit {
             // marker2.userData = { index: 1 };
             // this.mapView.addMarker(marker, marker2);
             this.mapView.addMarker(marker);
+            marker.showInfoWindow();
         })
 
         // this.appointmentService.loopGetAppiontments().catch(err =>  { 
@@ -210,9 +212,9 @@ export class AppointmentDetailComponent implements OnInit {
     }
 
     onMarkerEvent(args) {
-        // console.log("Marker Event: '" + args.eventName
-        //     + "' triggered on: " + args.marker.title
-        //     + ", Lat: " + args.marker.position.latitude + ", Lon: " + args.marker.position.longitude, args);
+        console.log("Marker Event: '" + args.eventName
+            + "' triggered on: " + args.marker.title
+            + ", Lat: " + args.marker.position.latitude + ", Lon: " + args.marker.position.longitude, args);
     }
 
     onCameraChanged(args) {

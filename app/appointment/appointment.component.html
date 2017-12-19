@@ -1,4 +1,4 @@
-<ActionBar title="BI Appointments" class="action-bar" color="white" backgroundColor="#4c70f5">
+<ActionBar title="BI Appointments" class="action-bar" color="white" backgroundColor="#F9A11F">
         <ActionItem *ngIf="true" (tap)="setDate()"
         ios.systemIcon="2" android.systemIcon="ic_menu_my_calendar"
         ios.position="right"></ActionItem>
@@ -10,7 +10,7 @@
       <ActionItem *ngIf="true" (tap)="onCancel()"
         ios.systemIcon="1" android.systemIcon="ic_menu_close_clear_cancel"></ActionItem> -->
     </ActionBar>
-    <StackLayout backgroundColor="#4c70f5">
+    <StackLayout backgroundColor="#F9A11F">
         <!-- <ListView class="list-group" [items]="appointments "  > -->
         <ListView class="list-group" [items]="appointments  | async"  >
             <ng-template let-appointment="item" >

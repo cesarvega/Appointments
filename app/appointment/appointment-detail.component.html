@@ -1,4 +1,4 @@
-<ActionBar title="Appointment Details" class="action-bar" color="#FFF" backgroundColor="#4c70f5">
+<ActionBar title="Appointment Details" class="action-bar" color="#FFF" backgroundColor="#F9A11F">
 </ActionBar>
 <ScrollView class="page">
     <StackLayout orientation="vertical">
@@ -15,7 +15,8 @@
         </GridLayout>
         <GridLayout columns="*" rows="*">
             <FlexboxLayout flexGrow="1" flexDirection="column" row="0" col="1" class="address-info">
-                <Label horizontalAlignment="center" textWrap="true" text="Appointment Address" class="lab-name"></Label>
+                <Label horizontalAlignment="center" textWrap="true" text="Appointment Address"  color="#FCD837" class="lab-name"></Label>
+                <Label textWrap="true" [text]="'App Id: '+ appointment.AppId"></Label>
                 <Label textWrap="true" [text]="appointment.cliAddress1"></Label>
                 <Label *ngIf="appointment.cliAddress2!==''" [text]="appointment.cliAddress2"></Label>
                 <Label [text]="appointment.cliState"></Label>
@@ -42,7 +43,7 @@
             </FlexboxLayout>
         </GridLayout>
         <Label horizontalAlignment="center" textWrap="true" [text]="'EXPENSES'" class="lab-name"></Label>
-        <CardView *ngIf="image" class="cardStyle" margin="10" elevation="20" radius="1" backgroundColor="#4c70f5">
+        <CardView *ngIf="image" class="cardStyle" margin="10" elevation="20" radius="1" backgroundColor="#F27C21">
             <GridLayout rows="*,*,*,*,*" columns="*">
                 <Label class="text-center" horizontalAlignment="left" [text]="'Expense 1'" row="0" col="0"></Label>
                 <Image [src]="image" width="200" stretch="aspectFit" col="0" row="1"></Image>
@@ -51,14 +52,14 @@
                 <button class="checkin" (onTap)="saveExpense()" text="SAVE EXPENSE +" col="0" row="4"></button>
             </GridLayout>
         </CardView>
-        <ListView class="list-group" [items]="expenses" [height]="'500' * expenses.length">
+        <ListView class="list-group" [items]="expenses" [height]="'600' * expenses.length">
             <ng-template let-expense="item" let-i="index">
-                <CardView class="cardStyle" margin="10" elevation="20" radius="1" backgroundColor="#042fd0">
+                <CardView class="cardStyle" margin="10" elevation="20" radius="1" backgroundColor="#F27C21">
                     <GridLayout rows="*,*,*,*,*" columns="*">
-                        <Label class="text-center" horizontalAlignment="left" [text]="'Expense '+ i" row="0" col="0"></Label>
-                        <Image [src]="'data:image/gif;base64,' + expense.img" width="350" stretch="aspectFit" col="0" row="1"></Image>
-                        <TextField [(ngModel)]="expense.recTotal" hint="Enter Amount $" col="0" row="2"></TextField>
-                        <TextField [(ngModel)]="expense.recType" hint="Enter Type of expense " col="0" row="3"></TextField>
+                        <Label horizontalAlignment="center" [text]="'Expense '+ i" row="0" col="0"></Label>
+                        <Image [src]="'data:image/gif;base64,' + expense.img" width="350" stretch="aspectFit" col="0" row="2"></Image>
+                        <TextField [(ngModel)]="expense.recTotal" hint="Enter Amount $" col="0" row="3"></TextField>
+                        <TextField [(ngModel)]="expense.recType" hint="Enter Type of expense " col="0" row="4"></TextField>
                         <!-- <Button class="checkin" (onTap)="saveExpense()" text="SAVE EXPENSE +" col="0" row="4"></Button> -->
                     </GridLayout>
                 </CardView>
