@@ -39,7 +39,7 @@
         </GridLayout>
         <GridLayout columns="*" rows="*">
             <FlexboxLayout flexGrow="1" flexDirection="column" class="address-info">
-                <button class="expense" (onTap)="addExpense()" [text]="'+ Add Expense'"></button>
+                <button  class="expense" (onTap)="addExpense()" [text]="'+ Add Expense'"></button>
             </FlexboxLayout>
         </GridLayout>
         <Label horizontalAlignment="center" textWrap="true" [text]="'EXPENSES'" class="lab-name"></Label>
@@ -49,7 +49,7 @@
                 <Image [src]="image" width="200" stretch="aspectFit" col="0" row="1"></Image>
                 <TextField [(ngModel)]="amount" hint="Enter Amount $" col="0" row="2"></TextField>
                 <TextField [(ngModel)]="expenseType" hint="Enter Type of expense " col="0" row="3"></TextField>
-                <button class="checkin" (onTap)="saveExpense()" text="SAVE EXPENSE +" col="0" row="4"></button>
+                <button *ngIf="isExpenseAdded" class="checkin" (onTap)="saveExpense()" text="SAVE EXPENSE +" col="0" row="4"></button>
             </GridLayout>
         </CardView>
         <ListView class="list-group" [items]="expenses" [height]="'600' * expenses.length">

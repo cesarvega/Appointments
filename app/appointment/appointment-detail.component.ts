@@ -28,6 +28,7 @@ declare var Bitmap;
     styleUrls: ['./appointment-detail.css']
 })
 export class AppointmentDetailComponent implements OnInit {
+  
     private appointment: Appointment;
     private expenses: Array<object>;
     private latitude = 25.769490;
@@ -47,6 +48,7 @@ export class AppointmentDetailComponent implements OnInit {
     private expenseType: any = '';
     private image: string;
     private imagebase: string;
+    private isExpenseAdded: boolean = true;
     // private image: any = "https://play.nativescript.org/dist/assets/img/NativeScript_logo.png";
 
     lastCamera: String;
@@ -59,7 +61,7 @@ export class AppointmentDetailComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
+       
     }
 
     showToast(message: string) {
@@ -81,6 +83,8 @@ export class AppointmentDetailComponent implements OnInit {
                 console.log("Error -> " + err.message);
                 this.showToast('Something went wrong please try again : ' + err.message);
             });
+
+            this.isExpenseAdded = true;
     }
 
     saveExpense() {
@@ -90,6 +94,8 @@ export class AppointmentDetailComponent implements OnInit {
         }).subscribe(res => {
             this.imagebase = null;
             this.showToast('The Expense was successfully add it');
+            this.isExpenseAdded = false;
+            this.getExpenses();
             console.dir(res);
         }), err => {
             console.log("error: " + err.message);
@@ -201,10 +207,7 @@ export class AppointmentDetailComponent implements OnInit {
         //     console.dir("appointmentsloop : "+res);
 
         // })
-
-        this.appointmentService.getExpensesByAppointmentId(this.appointment.AppId.toString()).subscribe(res => {
-            this.expenses = res;
-        });
+        this.getExpenses();
     }
 
     onCoordinateTapped(args) {
@@ -310,5 +313,11 @@ export class AppointmentDetailComponent implements OnInit {
 
         return zoom
     }
+
+    getExpenses(): any {    
+         this.appointmentService.getExpensesByAppointmentId(this.appointment.AppId.toString()).subscribe(res => {
+             this.expenses = res;
+         });
+     }
 
 }
