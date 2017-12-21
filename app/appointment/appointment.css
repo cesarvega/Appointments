@@ -6,12 +6,20 @@
     text-align: center;
 }
 
+
+.appid{    
+    font-size: 10;
+    color: white;   
+    text-align: center;
+    padding-top: 5;
+}
+
 .date-month{
     font-size: 13;
     /* color: #FFFFFF; */
     color: #FCD837;
     text-align: center;
-    padding-top: 5;
+    /* padding-top: 5; */
 
 }
 

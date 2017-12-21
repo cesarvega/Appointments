@@ -8,6 +8,7 @@ import { AppointmentComponent } from "./appointment/appointment.component";
 import { AppointmentDetailComponent } from "./appointment/appointment-detail.component";
 import { AppointmentService } from "./appointment/appointment.service";
 import { LoopAppointmentService } from "./appointment/loop/loop-appointment.service";
+import { DropDownModule } from "nativescript-drop-down/angular";
 import * as platform from "platform";
 declare var GMSServices: any;
 
@@ -29,7 +30,8 @@ if(platform.isIOS) {
         NativeScriptModule,
         NativeScriptHttpModule,
         AppRoutingModule,
-        NativeScriptFormsModule
+        NativeScriptFormsModule,
+        DropDownModule
     ],
     declarations: [
         AppComponent,

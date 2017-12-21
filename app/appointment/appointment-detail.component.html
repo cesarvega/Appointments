@@ -44,11 +44,13 @@
         </GridLayout>
         <Label horizontalAlignment="center" textWrap="true" [text]="'EXPENSES'" class="lab-name"></Label>
         <CardView *ngIf="image" class="cardStyle" margin="10" elevation="20" radius="1" backgroundColor="#F27C21">
-            <GridLayout rows="*,*,*,*,*" columns="*">
-                <Label class="text-center" horizontalAlignment="left" [text]="'Expense 1'" row="0" col="0"></Label>
+            <GridLayout rows="*,*,*,*,*,*" columns="*">
+                <Label class="text-center" horizontalAlignment="center" [text]="'Expense 1'" row="0" col="0"></Label>
                 <Image [src]="image" width="200" stretch="aspectFit" col="0" row="1"></Image>
                 <TextField [(ngModel)]="amount" hint="Enter Amount $" col="0" row="2"></TextField>
-                <TextField [(ngModel)]="expenseType" hint="Enter Type of expense " col="0" row="3"></TextField>
+                <!-- <TextField [(ngModel)]="expenseType" hint="Enter Type of expense "></TextField> -->
+                <DropDown class="dropdown" backgroundColor="#F9A11F" height="40" [items]="options" [(ngModel)]="selectedIndex" 
+                (selectedIndexChanged)="onchange($event)" (opened)="onopen()" (closed)="onclose()" col="0" row="3"></DropDown>
                 <button *ngIf="isExpenseAdded" class="checkin" (onTap)="saveExpense()" text="SAVE EXPENSE +" col="0" row="4"></button>
             </GridLayout>
         </CardView>
@@ -56,7 +58,7 @@
             <ng-template let-expense="item" let-i="index">
                 <CardView class="cardStyle" margin="10" elevation="20" radius="1" backgroundColor="#F27C21">
                     <GridLayout rows="*,*,*,*,*" columns="*">
-                        <Label horizontalAlignment="center" [text]="'Expense '+ i" row="0" col="0"></Label>
+                        <Label class="text-center" horizontalAlignment="center" [text]="'Expense '+ i" row="0" col="0"></Label>
                         <Image [src]="'data:image/gif;base64,' + expense.img" width="350" stretch="aspectFit" col="0" row="2"></Image>
                         <TextField [(ngModel)]="expense.recTotal" hint="Enter Amount $" col="0" row="3"></TextField>
                         <TextField [(ngModel)]="expense.recType" hint="Enter Type of expense " col="0" row="4"></TextField>

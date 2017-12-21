@@ -14,6 +14,10 @@ import { resetCSSProperties } from "tns-core-modules/ui/frame/frame";
 registerElement('MapView', () => require("nativescript-google-maps-sdk").MapView);
 import { fromAsset, fromData } from "tns-core-modules/image-source/image-source";
 import { LoopAppointment } from "./loop/loop-appointment.model";
+// import { DropDown } from 'nativescript-drop-down';
+import { ValueList } from "nativescript-drop-down";
+import { SelectedIndexChangedEventData } from "nativescript-drop-down";
+import { forEach } from "@angular/router/src/utils/collection";
 // import { android } from "tns-core-modules/application/application";
 // declare var BitmapFactory: any
 declare var android;
@@ -28,7 +32,8 @@ declare var Bitmap;
     styleUrls: ['./appointment-detail.css']
 })
 export class AppointmentDetailComponent implements OnInit {
-  
+    
+    public  selectedIndex = 1;
     private appointment: Appointment;
     private expenses: Array<object>;
     private latitude = 25.769490;
@@ -49,6 +54,13 @@ export class AppointmentDetailComponent implements OnInit {
     private image: string;
     private imagebase: string;
     private isExpenseAdded: boolean = true;
+    private options = [ "Billable Travel Meals",
+                        "Billable Travel Non-Meals",
+                        "Non-Billable Travel Meals",
+                        "Non-Billable Travel Non-Meals"];
+
+           
+    
     // private image: any = "https://play.nativescript.org/dist/assets/img/NativeScript_logo.png";
 
     lastCamera: String;
@@ -58,6 +70,7 @@ export class AppointmentDetailComponent implements OnInit {
         private route: ActivatedRoute) {
         this.appointment = <Appointment>JSON.parse(this.route.snapshot.params["appointment"]);
         camera.requestPermissions();
+        
     }
 
     ngOnInit(): void {
@@ -88,7 +101,7 @@ export class AppointmentDetailComponent implements OnInit {
     }
 
     saveExpense() {
-        this.appointmentService.saveExpense(this.appointment, this.imagebase, this.expenseType, this.amount).catch(err => {
+        this.appointmentService.saveExpense(this.appointment, this.imagebase, this.selectedIndex.toString(), this.amount).catch(err => {
             console.dir(err);
             return err; // observable needs to be returned or exception raised
         }).subscribe(res => {
@@ -316,8 +329,24 @@ export class AppointmentDetailComponent implements OnInit {
 
     getExpenses(): any {    
          this.appointmentService.getExpensesByAppointmentId(this.appointment.AppId.toString()).subscribe(res => {
+
+            res.forEach(element => {
+                element.recType = this.options[element.recType];
+            });
+                
              this.expenses = res;
          });
      }
 
+      onchange(args: SelectedIndexChangedEventData) {
+        console.log(`Drop Down selected index changed from ${args.oldIndex} to ${args.newIndex}`);
+    }
+
+     onopen() {
+        console.log("Drop Down opened.");
+    }
+
+     onclose() {
+        console.log("Drop Down closed.");
+    }
 }

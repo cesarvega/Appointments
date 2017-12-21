@@ -1,12 +1,11 @@
-<ActionBar title="BI Appointments v.010" class="action-bar" color="white" backgroundColor="#F9A11F">
-        <ActionItem *ngIf="true" (tap)="setDate()"
+<ActionBar title="BI Appointments v.011" class="action-bar" color="white" backgroundColor="#F9A11F">
+        <ActionItem *ngIf="true" (tap)="setDate()" 
         ios.systemIcon="2" android.systemIcon="ic_menu_my_calendar"
         ios.position="right"></ActionItem>
     
       <!-- <ActionItem *ngIf="true" (tap)="onSave()" 
         ios.systemIcon="3" android.systemIcon="ic_menu_save"
-        ios.position="right"></ActionItem>
-    
+        ios.position="right"></ActionItem>    
       <ActionItem *ngIf="true" (tap)="onCancel()"
         ios.systemIcon="1" android.systemIcon="ic_menu_close_clear_cancel"></ActionItem> -->
     </ActionBar>
@@ -17,22 +16,25 @@
                 <StackLayout (onTap)="onNavigationItemTap(appointment)" >
                     <GridLayout columns="80,*,auto" rows="*, *, *"  class="info"  >
                         <FlexboxLayout flexDirection="column" row="0" col="0">
-                            <Label class="date-month" [text]="appointment.AppDate.split(',')[1]"></Label>
+                            <Label class="date-month" [text]="appointment.AppDate.split(',')[1].split('-')[0]"></Label>
                             <Label class="date" [text]="appointment.AppDate.split(',')[0]"></Label>
+                            <Label class="date-month" [text]="appointment.AppDate.split(',')[1].split('-')[1]"></Label>
                         </FlexboxLayout>
                         <FlexboxLayout flexGrow="1" flexDirection="column" row="0" col="1" class="lab-info">
                                 <Label horizontalAlignment="left" [text]="appointment.cliCompany" class="lab-name"></Label>
                                 <Label horizontalAlignment="left" [text]="appointment.cliContact" class="lab-sub-name"></Label>                        
+                                                   
                         </FlexboxLayout>
                         <FlexboxLayout flexDirection="column" row="0" col="3" class="">
-                            <Label class="fa" text="&#xf05a;" ></Label>                         
+                                <Label class="fa" text="&#xf05a;" ></Label>   
+                            <Label horizontalAlignment="right" [text]="appointment.AppId" class="appid"></Label>                          
                         </FlexboxLayout>
                     </GridLayout>
                 </StackLayout>
             </ng-template>
         </ListView>      
     </StackLayout>
-    <DatePicker backgroundColor="#FFFFFF" (loaded)="onPickerLoaded($event)" 
+    <DatePicker  backgroundColor="#F9A11F" (loaded)="onPickerLoaded($event)" 
     (dateChange)="onDateChanged($event)" [visibility]="isItemVisible ? 'visible' : 'collapsed'"
     (dayChange)="onDayChanged($event)"  (monthChange)="onMonthChanged($event)" 
     (yearChange)="onYearChanged($event)" horizontalAligment="bottom" verticalAlignment="center"></DatePicker>

@@ -4,6 +4,12 @@
     color: #ffffff;
 }
 
+.dropdown {
+    background-color: #F27C21;
+    color: #ffffff;
+    padding: 10;
+}
+
 
 .date {    
     font-size: 75;

@@ -21,6 +21,7 @@ import { EventData } from "data/observable";
     styleUrls: ["appointment.css"],
     templateUrl: "appointment.component.html"
 })
+
 export class AppointmentComponent implements OnInit {
     private stringDate: string;
     private appointments: Observable<Appointment[]>;
