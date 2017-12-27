@@ -30,12 +30,7 @@ export class AppointmentComponent implements OnInit {
     constructor(private _router: Router, private appointmentService: AppointmentService, private loopAppointmentService: LoopAppointmentService) { }
 
     ngOnInit(): void {
-        Telephony().then(function (resolved) {
-            localStorage.setItem('phoneNumber', resolved.phoneNumber);
-        }).catch(function (error) {
-            console.error('error >', error)
-            console.dir(error);
-        })
+       
         // this.loopAppointmentService.loopGetAppiontments().catch(err =>  { 
         //     console.dir(err);            
         //     return err; // observable needs to be returned or exception raised
@@ -43,6 +38,12 @@ export class AppointmentComponent implements OnInit {
         //     console.dir(res);
         //     this.appointments = res;            
         // });
+        Telephony().then(function (resolved) {
+            localStorage.setItem('phoneNumber', (resolved.phoneNumber)?resolved.phoneNumber:'15555218135');
+        }).catch(function (error) {
+            console.error('error >', error)
+            console.dir(error);
+        })
         let date =  new Date();      
         this.setAppointmentDate(date);           
     }
