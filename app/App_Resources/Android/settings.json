@@ -1,1 +1,5 @@
-{"appId":"org.nativescript.APPOINTMENTS","minSdkVersion":null,"targetSdkVersion":null}
+{
+  "appId": "org.nativescript.APPOINTMENTS",
+  "minSdkVersion": 19,
+  "targetSdkVersion": 25
+}

@@ -27,10 +27,16 @@ export class AppointmentComponent implements OnInit {
     private appointments: Observable<Appointment[]>;
     // private appointments:  Observable<LoopAppointment[]>; 
     private isItemVisible = false;
-    constructor(private _router: Router, private appointmentService: AppointmentService, private loopAppointmentService: LoopAppointmentService) { }
+    constructor(private _router: Router, private appointmentService: AppointmentService, private loopAppointmentService: LoopAppointmentService) { 
+        Telephony().then(function (resolved) {
+            localStorage.setItem('phoneNumber', (resolved.phoneNumber)?resolved.phoneNumber:'15555218135');
+        }).catch(function (error) {
+            console.error('error >', error)
+            console.dir(error);
+        });          
+    }
 
-    ngOnInit(): void {
-       
+    ngOnInit(): void {  
         // this.loopAppointmentService.loopGetAppiontments().catch(err =>  { 
         //     console.dir(err);            
         //     return err; // observable needs to be returned or exception raised
@@ -38,17 +44,21 @@ export class AppointmentComponent implements OnInit {
         //     console.dir(res);
         //     this.appointments = res;            
         // });
-        Telephony().then(function (resolved) {
-            localStorage.setItem('phoneNumber', (resolved.phoneNumber)?resolved.phoneNumber:'15555218135');
-        }).catch(function (error) {
-            console.error('error >', error)
-            console.dir(error);
-        })
+        
         let date =  new Date();      
         this.setAppointmentDate(date);           
     }
 
     setAppointmentDate(date : Date){
+        if (localStorage.getItem('phoneNumber') === null) {
+            Telephony().then(function (resolved) {
+                localStorage.setItem('phoneNumber', (resolved.phoneNumber)?resolved.phoneNumber:'15555218135');
+            }).catch(function (error) {
+                console.error('error >', error)
+                console.dir(error);
+            });  
+        };    
+
         let day = date.getDate();
         let month = date.getMonth() + 1;// from 0 - 11
         let year = date.getFullYear();

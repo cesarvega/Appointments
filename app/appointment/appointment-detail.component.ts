@@ -62,7 +62,6 @@ export class AppointmentDetailComponent implements OnInit {
            
     
     // private image: any = "https://play.nativescript.org/dist/assets/img/NativeScript_logo.png";
-
     lastCamera: String;
 
     constructor(
@@ -74,7 +73,7 @@ export class AppointmentDetailComponent implements OnInit {
     }
 
     ngOnInit(): void {
-       
+       this.saveLocation();
     }
 
     showToast(message: string) {
@@ -153,8 +152,38 @@ export class AppointmentDetailComponent implements OnInit {
                         this.mapView.addMarker(marker);
                         // this.zoom = 13;
                         this.showToast('Your are too far away from check in location address');
+
+                        this.appointmentService.setGeoLocation(marker.position, this.appointment).subscribe(res => {
+                            // this.appointmentService.setGeoLocation(loc, this.appointment).subscribe(res => {
+                          
+                            console.log('bad checked in happening ');
+                        }, err => {
+                            console.log(err);
+                        });
                     }
+                    
                     marker.showInfoWindow();
+                }
+            }, (e) => {
+                console.log("Error: " + e.message);
+            });
+    }
+
+    saveLocation(): any {
+        getCurrentLocation({ desiredAccuracy: 3, updateDistance: 1, maximumAge: 20000, timeout: 20000 }).
+            then(loc => {
+                if (loc) {
+                    var marker = new Marker();                    
+                    var appointmentPosition = Position.positionFromLatLng(this.latitude, this.longitude);
+                    this.latitude = loc.latitude;
+                    this.longitude = loc.longitude;                    
+                    marker.position = Position.positionFromLatLng(loc.latitude, loc.longitude);
+                    var distance = this.calculatDistanceBetweenpoints(marker.position, appointmentPosition);                             
+                        this.appointmentService.setGeoLocation(marker.position, this.appointment).subscribe(res => {                            
+                            console.log(' check in add by system');
+                        }, err => {
+                            console.log(err);
+                        });             
                 }
             }, (e) => {
                 console.log("Error: " + e.message);
@@ -192,7 +221,6 @@ export class AppointmentDetailComponent implements OnInit {
             marker.position = Position.positionFromLatLng(this.latitude, this.longitude);
 
             // console.dir(marker.position);
-
             marker.title = res.results[0].formatted_address;
             marker.snippet = "";
 
@@ -218,7 +246,6 @@ export class AppointmentDetailComponent implements OnInit {
         //     return err; // observable needs to be returned or exception raised
         //  }).subscribe(res => {
         //     console.dir("appointmentsloop : "+res);
-
         // })
         this.getExpenses();
     }

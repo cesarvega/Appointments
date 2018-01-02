@@ -3,6 +3,7 @@ import { Http, Response, Headers } from "@angular/http";
 import { URLSearchParams } from "@angular/http"
 import { BehaviorSubject, Observable } from 'rxjs/';
 import { Appointment } from "./appointment.model";
+import { intl } from "nativescript-intl";
 
 import * as application from 'application'
 import { LoopAppointment } from "./loop/loop-appointment.model";
@@ -43,16 +44,25 @@ export class AppointmentService {
             let data = res.json();
             res.json().map((obj: any) => {
                 let dateTime = new Date(obj.AppDate);
+
+                var dateFormat = new intl.DateTimeFormat('en-US', {'year': 'numeric', 'month': 'short', 'day': 'numeric'}).format(new Date(obj.AppDate));
+                var numberFormat = new intl.NumberFormat('en-US', {'style': 'currency', 'currency': 'USD', 'currencyDisplay': 'symbol'}).format(123456.789);
+                 
+                console.log("dateFormat: " + dateFormat);
+                console.log("numberFormat: " + numberFormat);
+                // prints Mar 23, 2016
+                // $123456.79
+
+                var d = new Date(obj.AppDate);
+                var n = dateTime.getHours();
                 obj.AppDate = dateTime.getDate().toString() + ',' + this.monthNames[dateTime.getMonth()].toString() + '-' +
-                    + ((dateTime.getHours() + 24 - 2) % 24).toString() + ':'
+                    + (( n+5 + 24 - 2) % 24).toString() + ':'
                     + dateTime.getMinutes().toString() + ((dateTime.getHours() >= 12) ? " PM" : " AM").toString();
             });
             return data;
         });
     }
 
-
-    
     getAppointmentLocation(appointmentAddress): Observable<Array<Appointment>> {
         return this.http.get("http://maps.googleapis.com/maps/api/geocode/json?address=" + appointmentAddress).map(res => res.json());
     }
