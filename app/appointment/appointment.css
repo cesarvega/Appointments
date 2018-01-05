@@ -5,6 +5,13 @@
     color: white;   
     text-align: center;
 }
+/* .datepicker{    
+    font-size: 35;
+    color: white;   
+    text-align: center;
+    background-color :"#FF0000";
+    opacity: 0.8;
+} */
 
 
 .appid{    
@@ -35,7 +42,7 @@
     padding-left: 10;
     font-size: 15;
     font-weight: 400;
-    color: #F27C21;
+    color: #042fd0;
 }
 
 .mdi {
@@ -53,7 +60,7 @@
 
 .info{
       /* background-color: #042fd0; */
-      background-color: #F27C21;
+      background-color: #042fd0;
   }
 
 .lab-info{
@@ -62,7 +69,6 @@
     padding-top: 10;
 
 }
-
 .fa {
     font-family: 'FontAwesome', 'fontawesome-webfont';
     font-size: 25;

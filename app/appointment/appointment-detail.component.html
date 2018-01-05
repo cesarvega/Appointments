@@ -1,11 +1,12 @@
-<ActionBar title="Appointment Details" class="action-bar" color="#FFF" backgroundColor="#F9A11F">
+<ActionBar title="Appointment Details" class="action-bar" color="#FFF" backgroundColor="#4c70f5">
 </ActionBar>
 <ScrollView class="page">
     <StackLayout orientation="vertical">
         <GridLayout columns="auto,*" rows="*, *" class="info">
             <FlexboxLayout flexDirection="column" row="0" col="0">
+                <Label class="date-month" [text]="appointment.AppDate.split('-')[0].split(',')[1]"></Label>
                 <Label class="date" [text]="appointment.AppDate.split(',')[0]"></Label>
-                <Label class="date-month" [text]="appointment.AppDate.split(',')[1]"></Label>
+                <Label class="date-month" [text]="appointment.AppDate.split('-')[1]"></Label>
             </FlexboxLayout>
             <FlexboxLayout flexGrow="1" flexDirection="column" row="0" col="1" class="lab-info">
                 <Label horizontalAlignment="center" textWrap="true"  class="company" [text]="appointment.cliCompany"></Label>
@@ -32,6 +33,7 @@
         </GridLayout>
         <Label horizontalAlignment="center" textWrap="true" [text]="'appoinment location map'" class="lab-name"></Label>
         <GridLayout>
+
             <MapView zoomControlsEnabled="true" height="300" #mapView [latitude]="latitude" [longitude]="longitude" [zoom]="zoom" [bearing]="bearing" [tilt]="tilt"
                 i-padding="50,50,50,50" [padding]="padding" (mapReady)="onMapReady($event)" (markerSelect)="onMarkerEvent($event)"
                 (markerBeginDragging)="onMarkerEvent($event)" (markerEndDragging)="onMarkerEvent($event)" (markerDrag)="onMarkerEvent($event)"
@@ -43,25 +45,27 @@
             </FlexboxLayout>
         </GridLayout>
         <Label horizontalAlignment="center" textWrap="true" [text]="'EXPENSES'" class="lab-name"></Label>
-        <CardView *ngIf="image" class="cardStyle" margin="10" elevation="20" radius="1" backgroundColor="#F27C21">
+        <CardView *ngIf="image" class="cardStyle" margin="10" elevation="20" radius="1" backgroundColor="#4c70f5">
+        <!-- <CardView *ngIf="image" class="cardStyle" margin="10" elevation="20" radius="1" backgroundColor="#F27C21"> -->
             <GridLayout rows="*,*,*,*,*,*" columns="*">
                 <Label class="text-center" horizontalAlignment="center" [text]="'Expense 1'" row="0" col="0"></Label>
                 <Image [src]="image" width="200" stretch="aspectFit" col="0" row="1"></Image>
-                <TextField [(ngModel)]="amount" hint="Enter Amount $" col="0" row="2"></TextField>
+                <TextField  class="amount" keyboardType="number" min="1" max="5000" [(ngModel)]="amount" hint="Enter Amount $" col="0" row="2"></TextField>
                 <!-- <TextField [(ngModel)]="expenseType" hint="Enter Type of expense "></TextField> -->
-                <DropDown class="dropdown" backgroundColor="#F9A11F" height="40" [items]="options" [(ngModel)]="selectedIndex" 
-                (selectedIndexChanged)="onchange($event)" (opened)="onopen()" (closed)="onclose()" col="0" row="3"></DropDown>
+                <DropDown class="dropdown" backgroundColor="#4c70f5" height="40" [items]="options" [(ngModel)]="selectedIndex" 
+                (selectedIndexChanged)="onchange($event)" (opened)="onopen()" (closed)="onclose()" col="0" row="3"> </DropDown>
+                <!-- <Label class="fa" text="&#xf05a;" ></Label>    -->
                 <button *ngIf="isExpenseAdded" class="checkin" (onTap)="saveExpense()" text="SAVE EXPENSE +" col="0" row="4"></button>
             </GridLayout>
         </CardView>
         <ListView class="list-group" [items]="expenses" [height]="'600' * expenses.length">
             <ng-template let-expense="item" let-i="index">
-                <CardView class="cardStyle" margin="10" elevation="20" radius="1" backgroundColor="#F27C21">
+                <CardView class="cardStyle" margin="10" elevation="20" radius="1" backgroundColor="#4c70f5">
                     <GridLayout rows="*,*,*,*,*" columns="*">
                         <Label class="text-center" horizontalAlignment="center" [text]="'Expense '+ i" row="0" col="0"></Label>
                         <Image [src]="'data:image/gif;base64,' + expense.img" width="350" stretch="aspectFit" col="0" row="2"></Image>
-                        <TextField [(ngModel)]="expense.recTotal" hint="Enter Amount $" col="0" row="3"></TextField>
-                        <TextField [(ngModel)]="expense.recType" hint="Enter Type of expense " col="0" row="4"></TextField>
+                        <TextField editable= "false" [(ngModel)]="expense.recTotal" hint="Enter Amount $" col="0" row="3"></TextField>
+                        <TextField editable= "false" [(ngModel)]="expense.recType" hint="Enter Type of expense " col="0" row="4"></TextField>
                         <!-- <Button class="checkin" (onTap)="saveExpense()" text="SAVE EXPENSE +" col="0" row="4"></Button> -->
                     </GridLayout>
                 </CardView>

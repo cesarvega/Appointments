@@ -1,13 +1,17 @@
 
 .cardStyle {
-    background-color: #F27C21;
+    background-color: #042fd0;
     color: #ffffff;
 }
 
 .dropdown {
-    background-color: #F27C21;
+    background-color: #042fd0;
     color: #ffffff;
     padding: 10;
+}
+
+.amount {
+   padding: 10;
 }
 
 
@@ -15,7 +19,7 @@
     font-size: 75;
     color: #ffffff;   
     text-align: center;
-    padding: 10;
+    /* padding: 10; */
 
 }
 
@@ -23,7 +27,7 @@
     font-size: 18;
     color: #FCD837;
     text-align: center;
-
+    padding: 0;
 }
 
 .lab-name {
@@ -39,11 +43,10 @@
     padding-left: 10;
     font-size: 17;
     font-weight: 400;
-    color: #F27C21;
+    color: #042fd0;
     text-align: center;
     padding-bottom: 5;
 }
-
   .icon {
     font-family: 'icomoon';
     font-size: 58;
@@ -51,7 +54,7 @@
 
 .info{
       /* background-color: #042fd0; */
-      background-color: #F27C21;
+      background-color: #042fd0;
   }
 
 .lab-info{
@@ -61,7 +64,7 @@
 }
 
 .address-info{
-    background-color: #F27C21;
+    background-color: #042fd0;
     color: #FFFFFF;
     padding: 10;
     text-align: center;

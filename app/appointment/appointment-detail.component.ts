@@ -54,10 +54,10 @@ export class AppointmentDetailComponent implements OnInit {
     private image: string;
     private imagebase: string;
     private isExpenseAdded: boolean = true;
-    private options = [ "Billable Travel Meals",
-                        "Billable Travel Non-Meals",
-                        "Non-Billable Travel Meals",
-                        "Non-Billable Travel Non-Meals"];
+    private options = [ "1. Billable Travel Meals         ▾",
+                        "2. Billable Travel Non-Meals     ▾",
+                        "3. Non-Billable Travel Meals     ▾",
+                        "4. Non-Billable Travel Non-Meals ▾"];
 
            
     

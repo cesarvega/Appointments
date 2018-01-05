@@ -3,7 +3,6 @@ import { Http, Response, Headers } from "@angular/http";
 import { URLSearchParams } from "@angular/http"
 import { BehaviorSubject, Observable } from 'rxjs/';
 import { Appointment } from "./appointment.model";
-import { intl } from "nativescript-intl";
 
 import * as application from 'application'
 import { LoopAppointment } from "./loop/loop-appointment.model";
@@ -39,26 +38,20 @@ export class AppointmentService {
         body.set('phoneId', localStorage.getItem('phoneNumber'));
         body.set('phoneIdType', "1");
         body.set('selDate', date);
-
         return this.http.post(this.url + this.urlGetAppointments, body.toString(), { headers: headers }).map(res => {
             let data = res.json();
             res.json().map((obj: any) => {
                 let dateTime = new Date(obj.AppDate);
-
-                var dateFormat = new intl.DateTimeFormat('en-US', {'year': 'numeric', 'month': 'short', 'day': 'numeric'}).format(new Date(obj.AppDate));
-                var numberFormat = new intl.NumberFormat('en-US', {'style': 'currency', 'currency': 'USD', 'currencyDisplay': 'symbol'}).format(123456.789);
-                 
-                console.log("dateFormat: " + dateFormat);
-                console.log("numberFormat: " + numberFormat);
-                // prints Mar 23, 2016
-                // $123456.79
-
-                var d = new Date(obj.AppDate);
-                var n = dateTime.getHours();
-                obj.AppDate = dateTime.getDate().toString() + ',' + this.monthNames[dateTime.getMonth()].toString() + '-' +
-                    + (( n+5 + 24 - 2) % 24).toString() + ':'
-                    + dateTime.getMinutes().toString() + ((dateTime.getHours() >= 12) ? " PM" : " AM").toString();
-            });
+                var hours = obj.AppDate.split('T')[1].toString();
+                var time = hours.toString().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [obj.AppDate];                
+                  if (time.length > 1) { // If time format correct
+                    time = time.slice (1);  // Remove full string match value
+                    time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM
+                    time[0] = +time[0] % 12 || 12; // Adjust hours
+                  }                
+                var temp = dateTime.getDate().toString() + ',' + this.monthNames[dateTime.getMonth()].toString() +'-'+  time.join ('');
+                obj.AppDate = temp;
+            });        
             return data;
         });
     }
@@ -69,7 +62,7 @@ export class AppointmentService {
 
     setGeoLocation(location: any, appointment: Appointment): Observable<any> {
         let dateTime = new Date();
-        let dateahora = dateTime.getFullYear().toString() + '-' + dateTime.getMonth().toString() + '-' + dateTime.getDate().toString() + ' ' +
+        let dateahora = dateTime.getFullYear().toString() + '-' + (dateTime.getMonth()+1).toString() + '-' + dateTime.getDate().toString() + ' ' +
             + dateTime.getHours().toString() + ':' + dateTime.getMinutes().toString() + ':' + dateTime.getSeconds().toString();
         const headers = new Headers();
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
