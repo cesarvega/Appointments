@@ -44,6 +44,8 @@ export class AppointmentComponent implements OnInit {
         //     console.dir(res);
         //     this.appointments = res;            
         // });
+
+     
         
         let date =  new Date();      
         this.setAppointmentDate(date);           

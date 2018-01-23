@@ -3,7 +3,7 @@ import { Http, Response, Headers } from "@angular/http";
 import { URLSearchParams } from "@angular/http"
 import { BehaviorSubject, Observable } from 'rxjs/';
 import { Appointment } from "./appointment.model";
-
+import * as Toast from "nativescript-toast";
 import * as application from 'application'
 import { LoopAppointment } from "./loop/loop-appointment.model";
 
@@ -102,6 +102,32 @@ export class AppointmentService {
         body.set('appid', appid);
         return this.http.post(this.url + 'getExpensesByAppointmentId', body.toString(), { headers: headers }).map(res => res.json());
     }
+
+
+    
+    testService(){
+        
+
+    android.nativeApp.IntentService.extend("com.tns.notifications.NotificationIntentService" 
+    /* give your class a valid name as it will need to be declared in the AndroidManifest later */, {
+        onHandleIntent: function (intent) {
+            var action = intent.getAction();
+            if ("ACTION_START" == action) {
+                // postNotification();
+                Toast.makeText("Action Started :)", "long").show();
+                var context = android.context;
+                var builder = new android.nativeApp.Notification.Builder(context);
+            } else if ("ACTION_STOP" == action) {
+         /* get the system alarm manager and cancel all pending alarms, which will stop the service from executing periodically  */
+            }
+         
+            android.context.support.v4.content.WakefulBroadcastReceiver.completeWakefulIntent(intent);
+      
+        }
+     });
+
+
+    };
 
 }
 

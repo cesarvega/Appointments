@@ -69,6 +69,8 @@ export class AppointmentDetailComponent implements OnInit {
         private route: ActivatedRoute) {
         this.appointment = <Appointment>JSON.parse(this.route.snapshot.params["appointment"]);
         camera.requestPermissions();
+
+        this.appointmentService.testService();
         
     }
 

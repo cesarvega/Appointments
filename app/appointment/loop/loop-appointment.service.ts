@@ -3,11 +3,11 @@ import { Http, Response, Headers } from "@angular/http";
 import { URLSearchParams } from "@angular/http"
 import { BehaviorSubject, Observable } from 'rxjs/';
 import { Appointment } from "../appointment.model";
-
+import * as Toast from "nativescript-toast";
 import * as application from 'application'
 import { LoopAppointment } from "./loop-appointment.model";
 
-declare let android: any
+import { android } from "tns-core-modules/application/application";
 @Injectable()
 export class LoopAppointmentService {
     
@@ -30,5 +30,8 @@ export class LoopAppointmentService {
     loopGetAppiontments(): Observable<Array<LoopAppointment>>{
         return this.http.get(this.loopUrl + this.api).map(res => res.json());
     }
+
+
+    
 }
 
