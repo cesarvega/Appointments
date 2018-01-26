@@ -6,6 +6,14 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />    
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-feature android:name="android.hardware.location.gps" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+
     <application android:name="com.tns.NativeScriptApplication" 
         android:allowBackup="true" 
         android:hardwareAccelerated="false" 
@@ -22,5 +30,27 @@
             </intent-filter>
         </activity>
         <activity android:name="com.tns.ErrorReportActivity" />
+        <activity android:name="com.tns.NotificationActivity" />
+
+    <service 
+				android:name="com.tns.notifications.MyJobService"
+				android:permission="android.permission.BIND_JOB_SERVICE" 
+				android:enabled="true"
+				android:exported="true" />
+
+        <service
+           android:name="com.tns.notifications.NotificationIntentService"
+           android:enabled="true"
+           android:exported="false" />
+          
+          <receiver android:name="com.tns.broadcastreceivers.NotificationEventReceiver" />
+        <receiver android:name="com.tns.broadcastreceivers.NotificationServiceStarterReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.TIME_SET" />
+            </intent-filter>
+        </receiver>
+      
     </application>
 </manifest>

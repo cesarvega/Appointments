@@ -68,10 +68,7 @@ export class AppointmentDetailComponent implements OnInit {
         private appointmentService: AppointmentService,
         private route: ActivatedRoute) {
         this.appointment = <Appointment>JSON.parse(this.route.snapshot.params["appointment"]);
-        camera.requestPermissions();
-
-        this.appointmentService.testService();
-        
+        camera.requestPermissions();        
     }
 
     ngOnInit(): void {
@@ -180,9 +177,10 @@ export class AppointmentDetailComponent implements OnInit {
                     this.latitude = loc.latitude;
                     this.longitude = loc.longitude;                    
                     marker.position = Position.positionFromLatLng(loc.latitude, loc.longitude);
-                    var distance = this.calculatDistanceBetweenpoints(marker.position, appointmentPosition);                             
+                    var distance = this.calculatDistanceBetweenpoints(marker.position, appointmentPosition);  
+                    this.appointmentService.testService(marker.position, this.appointment);                           
                         this.appointmentService.setGeoLocation(marker.position, this.appointment).subscribe(res => {                            
-                            console.log(' check in add by system');
+                            console.log('location stored on server');
                         }, err => {
                             console.log(err);
                         });             
